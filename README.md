@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/logo.svg" alt="Pharmeazor" width="560">
+<img src="docs/assets/banner.webp" alt="Pharmeazor" width="820">
 
 **Base de connaissances médicamenteuse et assistant à preuves pour le pharmacien d'officine.**
 

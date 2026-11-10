@@ -1,0 +1,41 @@
+# Line endings
+#
+# The team works on Windows, Linux and macOS. Without this file, git rewrites
+# line endings per machine and the next person sees whole files as "changed"
+# when nothing was edited. Here, text is stored and checked out as LF
+# everywhere, so a diff only ever shows what someone actually wrote.
+
+* text=auto eol=lf
+
+# Source and config: always LF.
+*.py     text eol=lf
+*.md     text eol=lf
+*.txt    text eol=lf
+*.toml   text eol=lf
+*.cfg    text eol=lf
+*.ini    text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.json   text eol=lf
+*.csv    text eol=lf
+*.html   text eol=lf
+*.css    text eol=lf
+*.js     text eol=lf
+*.svg    text eol=lf
+*.sh     text eol=lf
+Makefile text eol=lf
+
+# Binary assets: never converted, never shown as text in a diff.
+*.png    binary
+*.webp   binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.woff   binary
+*.woff2  binary
+
+# Keep generated and vendored files out of language statistics and
+# collapsed by default in pull request diffs.
+docs/assets/** linguist-documentation

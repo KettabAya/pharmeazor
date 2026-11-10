@@ -1,0 +1,94 @@
+# Declared sources, ranked by authority, with their compliance record.
+#
+# `access` gates automated collection in code (see collect/registry.py):
+#   automated  - robots.txt and terms permit crawling, with delays
+#   manual     - download by hand only; automation is forbidden
+#   forbidden  - excluded from the corpus entirely
+#
+# `robots_checked_on` MUST be filled in before any automated collection.
+# A source that forbids crawling is used manually or dropped, never worked around.
+
+sources:
+  - source_id: anpp_rcp
+    name: "RCP et notices officiels - ANPP"
+    base_url: "https://anpp.dz/"
+    authority: OFFICIAL
+    access: manual
+    robots_checked_on: null
+    robots_note: "A verifier avant toute collecte automatique."
+    terms_note: "Documents officiels valides en Algerie. Source prioritaire."
+    country: DZ
+
+  - source_id: nomenclature
+    name: "Nomenclature nationale - Ministere de l'Industrie pharmaceutique"
+    base_url: "https://www.mip.gov.dz/"
+    authority: NOMENCLATURE
+    access: manual
+    robots_checked_on: null
+    robots_note: "La page de la liste interdit l'acces automatique (robots.txt)."
+    terms_note: "Telechargement manuel uniquement. Ni posologie ni indications."
+    country: DZ
+
+  - source_id: ansm_thesaurus
+    name: "Thesaurus des interactions medicamenteuses - ANSM"
+    base_url: "https://ansm.sante.fr/"
+    authority: INSTITUTIONAL
+    access: manual
+    robots_checked_on: null
+    robots_note: "A verifier."
+    terms_note: "Quatre niveaux d'interaction. Source etrangere : complement, jamais substitut."
+    country: FR
+
+  - source_id: dailymed
+    name: "DailyMed - notices officielles americaines"
+    base_url: "https://dailymed.nlm.nih.gov/"
+    authority: INSTITUTIONAL
+    access: manual
+    robots_checked_on: null
+    terms_note: "API publique disponible. Conditions de reutilisation a verifier."
+    country: US
+    language: en
+
+  - source_id: ema
+    name: "EMA - notices europeennes"
+    base_url: "https://www.ema.europa.eu/"
+    authority: INSTITUTIONAL
+    access: manual
+    robots_checked_on: null
+    terms_note: "Une meme substance peut avoir une notice differente d'un pays a l'autre."
+    country: EU
+
+  - source_id: pharmnet
+    name: "Pharm'Net (e-Sahti)"
+    base_url: "https://www.pharmnet-dz.com/"
+    authority: PROFESSIONAL
+    access: manual
+    robots_checked_on: null
+    terms_note: "Chiffres de 2017. Conditions d'acces et d'usage non precisees."
+    country: DZ
+
+  - source_id: medalgerie
+    name: "MEDAlgerie"
+    base_url: "https://www.medalgerie.com/"
+    authority: PROFESSIONAL
+    access: manual
+    robots_checked_on: null
+    terms_note: "Redige par un comite de professionnels. Pas d'API mentionnee."
+    country: DZ
+
+  - source_id: dzair_pharma
+    name: "dzair-pharma.net"
+    base_url: "https://dzair-pharma.net/"
+    authority: PROFESSIONAL
+    access: manual
+    robots_checked_on: null
+    terms_note: "Non officiel, donnees a titre informatif. Pas de notice complete."
+    country: DZ
+
+  - source_id: forums
+    name: "Forums, blogs, reseaux sociaux"
+    base_url: ""
+    authority: DISCARDED
+    access: forbidden
+    terms_note: "Ecartes du corpus, ainsi que prix, stocks et publicites."
+    country: ""

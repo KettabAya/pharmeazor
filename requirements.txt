@@ -1,0 +1,22 @@
+# Core runtime. Install with:  pip install -r requirements.txt
+pyyaml>=6.0
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+
+# Collection
+httpx>=0.27
+beautifulsoup4>=4.12
+
+# PDF reading
+pymupdf>=1.24
+pdfplumber>=0.11
+
+# Name matching
+rapidfuzz>=3.9
+
+# Optional extras live in pyproject.toml:
+#   pip install -e ".[dense]"  -> sentence-transformers + faiss
+#   pip install -e ".[ocr]"    -> pytesseract (scanned leaflets, incl. Arabic)
+#   pip install -e ".[llm]"    -> the imposed generative model client
+#   pip install -e ".[dev]"    -> pytest + ruff

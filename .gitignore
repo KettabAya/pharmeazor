@@ -1,0 +1,32 @@
+# --- secrets: never commit a key ---
+.env
+*.key
+credentials*.json
+
+# --- collected corpus (large, re-downloadable, licence-bound) ---
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+.cache/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- editors / OS ---
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

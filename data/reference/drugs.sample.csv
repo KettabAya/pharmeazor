@@ -1,0 +1,8 @@
+drug_id,inn,brand_names,atc_code,strength,form,therapeutic_class
+# PLACEHOLDER - replace with the 30-50 drug list handed out by the lecturer in week 1.
+# brand_names is pipe-separated. therapeutic_class is one of:
+#   antalgique_ains | antibiotique | antihypertenseur
+DZ-001,paracetamol,Doliprane|Efferalgan|Panadol,N02BE01,1000 mg,comprime,antalgique_ains
+DZ-002,ibuprofene,Nurofen|Advil,M01AE01,400 mg,comprime,antalgique_ains
+DZ-003,amoxicilline,Clamoxyl,J01CA04,500 mg,gelule,antibiotique
+DZ-004,amlodipine,Amlor,C08CA01,5 mg,comprime,antihypertenseur

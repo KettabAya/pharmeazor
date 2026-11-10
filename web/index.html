@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pharmeazor - base de connaissances medicamenteuse et assistant a preuves pour le pharmacien d officine.">
+<meta name="theme-color" content="#060D1F">
+<title>Pharmeazor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* Layout concept: one fixed plexus canvas behind a single scrolling column of
+   full-bleed bands; a cinematic splash sits above everything until it retires.
+   Single dark theme by design — this is a night-lab instrument panel. */
+:root{
+  --ink:#03070F; --ink-2:#060D1F; --panel:#0A1530; --panel-2:#0E1C3C;
+  --line:rgba(125,185,255,.14); --line-2:rgba(125,185,255,.28);
+  --cyan:#2DE2F0; --cyan-soft:#8FF2FB; --blue:#3E8BFF; --violet:#8B7BF7;
+  --mist:#9FB6D6; --mist-dim:#6E86A8; --white:#EAF4FF;
+  --ok:#34D399; --warn:#FFC53D; --orange:#FF8A3D; --danger:#FF4D6D;
+  --display:"Space Grotesk",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ink-2); color:var(--white);
+  font-family:var(--body); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+h1,h2,h3{font-family:var(--display); text-wrap:balance; margin:0; line-height:1.1}
+p{margin:0}
+a{color:var(--cyan-soft)}
+
+/* ---------- plexus canvas ---------- */
+#plexus{position:fixed; inset:0; width:100%; height:100%; z-index:0; display:block}
+.vignette{position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 0%,transparent 35%,rgba(3,7,15,.75) 100%)}
+.page{position:relative; z-index:2}
+
+/* ---------- shared band ---------- */
+.band{padding-block:clamp(72px,10vw,132px)}
+.wrap{max-width:1120px; margin-inline:auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--cyan); margin-bottom:18px;
+  display:flex; align-items:center; gap:10px}
+.eyebrow::before{content:""; width:26px; height:1px; background:var(--cyan); opacity:.6}
+h2{font-size:clamp(28px,4.2vw,46px); font-weight:600; letter-spacing:-.02em}
+.lede{color:var(--mist); max-width:62ch; margin-top:18px; font-size:clamp(15px,1.6vw,17.5px)}
+
+/* ---------- logo ---------- */
+.mark{display:block}
+.wire{fill:none; stroke:var(--cyan); stroke-width:1.1; stroke-linejoin:round; opacity:.62}
+.wire-hull{stroke-width:1.9; opacity:1}
+.facet{fill:none; stroke:var(--blue); stroke-width:.8; opacity:.42}
+.node{fill:var(--cyan-soft)}
+.lower{fill:url(#capFill); stroke:var(--cyan); stroke-width:1.5}
+.seam{fill:var(--cyan-soft)}
+
+.lockup{display:flex; align-items:center; gap:14px}
+.wordmark{font-family:var(--display); font-weight:600; letter-spacing:-.025em; color:var(--white)}
+.wordmark i{font-style:normal; color:var(--cyan)}
+
+/* ---------- splash ---------- */
+.splash{position:fixed; inset:0; z-index:60; display:grid; place-items:center;
+  background:radial-gradient(80% 60% at 50% 42%,#071435 0%,var(--ink) 70%);
+  animation:splashOut .85s cubic-bezier(.65,0,.35,1) 4.5s forwards}
+.splash.skip{animation:splashOut .4s ease forwards}
+@keyframes splashOut{to{opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.07)}}
+.splash-in{text-align:center; padding-inline:20px}
+.splash .mark{margin-inline:auto; width:min(210px,46vw); height:auto;
+  filter:drop-shadow(0 0 28px rgba(45,226,240,.4))}
+
+.splash .wire-hull,.splash .wire,.splash .facet{
+  stroke-dasharray:420; stroke-dashoffset:420; animation:draw 1.15s ease forwards}
+.splash .facet{animation-delay:.42s; animation-duration:.9s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.splash .node{opacity:0; animation:pop .5s ease forwards .55s}
+@keyframes pop{from{opacity:0; transform:scale(.3)}to{opacity:1; transform:scale(1)}}
+.splash .lower{opacity:0; animation:fadeIn .7s ease forwards .7s}
+.splash #half-up{animation:partUp .9s cubic-bezier(.3,.9,.3,1) forwards 1.15s}
+.splash #half-dn{animation:partDn .9s cubic-bezier(.3,.9,.3,1) forwards 1.15s}
+@keyframes partUp{to{transform:translate(-3.5px,-5px)}}
+@keyframes partDn{to{transform:translate(3.5px,5px)}}
+.splash .seam{opacity:0; animation:bloom 1.5s ease forwards 1.5s}
+@keyframes bloom{0%{opacity:0;transform:scaleX(.2)}45%{opacity:1}100%{opacity:.8;transform:scaleX(1)}}
+
+.splash .wordmark{font-size:clamp(34px,7.4vw,62px); opacity:0;
+  animation:riseIn .9s cubic-bezier(.2,.8,.3,1) forwards 2s; margin-top:30px}
+.splash .tag{font-family:var(--display); font-size:clamp(13px,2.2vw,17px);
+  color:var(--mist); letter-spacing:.04em; opacity:0;
+  animation:riseIn .9s ease forwards 2.45s; margin-top:12px}
+.splash .rule{width:0; height:1px; margin:26px auto 0;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  animation:ruleOut .9s ease forwards 2.6s}
+@keyframes ruleOut{to{width:min(300px,70vw)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{to{opacity:1}}
+
+.enter{margin-top:30px; opacity:0; animation:riseIn .7s ease forwards 3.1s;
+  display:inline-flex; align-items:center; gap:10px; cursor:pointer;
+  font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--cyan); background:rgba(45,226,240,.07); border:1px solid rgba(45,226,240,.35);
+  padding:13px 24px; border-radius:999px; transition:background .25s,transform .25s}
+.enter:hover{background:rgba(45,226,240,.16); transform:translateY(-2px)}
+.spill{position:absolute; left:50%; top:50%; width:4px; height:4px; border-radius:50%;
+  background:var(--cyan-soft); opacity:0; pointer-events:none}
+
+/* ---------- header ---------- */
+.topbar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+  backdrop-filter:blur(14px); background:rgba(6,13,31,.72);
+  border-bottom:1px solid var(--line)}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px);
+  z-index:21; background:rgba(6,13,31,.92)}
+.topbar .wrap{display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding-block:12px; flex-wrap:wrap}
+.topbar .mark{width:30px; height:30px}
+.topbar .wordmark{font-size:19px}
+.nav{display:flex; gap:22px; font-size:13.5px; color:var(--mist); flex-wrap:wrap}
+.nav a{color:inherit; text-decoration:none; transition:color .2s}
+.nav a:hover{color:var(--cyan-soft)}
+.demo-flag{font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--warn); border:1px solid rgba(255,197,61,.35);
+  border-radius:999px; padding:5px 11px; background:rgba(255,197,61,.07)}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(60px,9vw,110px) clamp(50px,7vw,86px)}
+.hero h1{font-size:clamp(46px,9vw,96px); font-weight:700; letter-spacing:-.045em}
+.hero h1 i{font-style:normal; color:var(--cyan)}
+.hero .tag{font-family:var(--display); font-size:clamp(17px,2.6vw,24px);
+  color:var(--cyan-soft); margin-top:14px; letter-spacing:-.01em}
+.hero .lede{margin-top:22px}
+
+.search{margin-top:40px; max-width:720px}
+.search-box{display:flex; align-items:center; gap:12px; background:rgba(10,21,48,.82);
+  border:1px solid var(--line-2); border-radius:14px; padding:6px 6px 6px 18px;
+  transition:border-color .25s,box-shadow .25s}
+.search-box:focus-within{border-color:var(--cyan); box-shadow:0 0 0 4px rgba(45,226,240,.1)}
+.search-box svg{flex:0 0 auto; opacity:.65}
+.search-box input{flex:1; min-width:0; background:none; border:0; outline:0;
+  color:var(--white); font:inherit; font-size:15.5px; padding-block:14px}
+.search-box input::placeholder{color:var(--mist-dim)}
+.ask{flex:0 0 auto; border:0; cursor:pointer; border-radius:10px; padding:12px 20px;
+  font-family:var(--display); font-weight:600; font-size:14px; color:#021018;
+  background:linear-gradient(135deg,var(--cyan),var(--blue)); transition:filter .2s,transform .2s}
+.ask:hover{filter:brightness(1.1); transform:translateY(-1px)}
+.chips{display:flex; gap:9px; flex-wrap:wrap; margin-top:16px}
+.chip{cursor:pointer; font-size:12.5px; color:var(--mist); background:rgba(14,28,60,.7);
+  border:1px solid var(--line); border-radius:999px; padding:8px 15px;
+  font-family:var(--body); transition:all .22s}
+.chip:hover{border-color:var(--line-2); color:var(--white)}
+.chip[aria-pressed="true"]{border-color:var(--cyan); color:var(--cyan-soft);
+  background:rgba(45,226,240,.1)}
+
+/* ---------- answer card ---------- */
+.answer{border:1px solid var(--line-2); border-radius:18px; overflow:hidden;
+  background:linear-gradient(180deg,rgba(14,28,60,.92),rgba(8,17,38,.92));
+  box-shadow:0 30px 70px -40px rgba(0,0,0,.9)}
+.answer-head{display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:16px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+.lvl{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--violet); border:1px solid rgba(139,123,247,.4); border-radius:999px;
+  padding:5px 12px; background:rgba(139,123,247,.09)}
+.verified{display:flex; align-items:center; gap:8px; font-family:var(--mono);
+  font-size:11.5px; color:var(--ok)}
+.verified .dot{width:7px; height:7px; border-radius:50%; background:var(--ok);
+  box-shadow:0 0 10px var(--ok)}
+.answer-body{padding:26px 22px 8px; display:grid; gap:22px}
+.a-row{display:grid; grid-template-columns:132px 1fr; gap:18px; align-items:start}
+.a-row .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--mist-dim); padding-top:4px}
+.a-row .v{min-width:0}
+.short{font-family:var(--display); font-size:clamp(19px,2.6vw,25px); font-weight:500;
+  letter-spacing:-.015em; line-height:1.3}
+.num{font-family:var(--mono); color:var(--cyan-soft); background:rgba(45,226,240,.1);
+  border:1px solid rgba(45,226,240,.3); border-radius:6px; padding:1px 7px;
+  font-size:.92em; white-space:nowrap}
+.expl{color:var(--mist); font-size:15px}
+.src{border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+  background:rgba(3,7,15,.5); display:grid; gap:9px}
+.src + .src{margin-top:10px}
+.src-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:13px}
+.src-name{font-weight:600; color:var(--white)}
+.rank{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  border-radius:4px; padding:3px 8px}
+.rank.off{color:var(--ok); border:1px solid rgba(52,211,153,.4); background:rgba(52,211,153,.08)}
+.rank.inst{color:var(--blue); border:1px solid rgba(62,139,255,.4); background:rgba(62,139,255,.08)}
+.rank.sec{color:var(--warn); border:1px solid rgba(255,197,61,.4); background:rgba(255,197,61,.08)}
+.src-date{font-family:var(--mono); font-size:11px; color:var(--mist-dim); margin-left:auto}
+.quote{font-family:var(--mono); font-size:12.5px; line-height:1.75; color:var(--mist);
+  border-left:2px solid var(--cyan); padding-left:14px}
+.quote mark{background:rgba(45,226,240,.18); color:var(--cyan-soft); border-radius:3px;
+  padding:0 3px}
+.answer-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  padding:18px 22px; border-top:1px solid var(--line); background:rgba(3,7,15,.4);
+  font-size:13px; color:var(--mist)}
+.meter{flex:1 1 150px; min-width:120px; height:5px; border-radius:999px;
+  background:rgba(125,185,255,.14); overflow:hidden}
+.meter span{display:block; height:100%; border-radius:999px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan)); transition:width .7s ease}
+.refusal{border-color:rgba(255,77,109,.4)}
+.refusal .lvl{color:var(--danger); border-color:rgba(255,77,109,.4); background:rgba(255,77,109,.09)}
+.refusal .short{color:#FFC2CE}
+
+/* ---------- pipeline ---------- */
+.pipe{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px;
+  margin-top:48px; counter-reset:step}
+.step{border:1px solid var(--line); border-radius:14px; padding:20px 18px;
+  background:rgba(10,21,48,.6); position:relative; min-width:0; transition:all .3s}
+.step:hover{border-color:var(--line-2); transform:translateY(-3px)}
+.step::before{counter-increment:step; content:"0" counter(step);
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--cyan); opacity:.75}
+.step h3{font-size:17px; font-weight:600; margin:10px 0 8px; letter-spacing:-.01em}
+.step p{font-size:13.5px; color:var(--mist); line-height:1.55}
+
+/* ---------- ladder ---------- */
+.ladder{margin-top:44px; display:grid; gap:10px}
+.rung{display:grid; grid-template-columns:38px 1fr auto; gap:18px; align-items:center;
+  border:1px solid var(--line); border-left:3px solid var(--cyan);
+  border-radius:12px; padding:16px 20px; background:rgba(10,21,48,.55); min-width:0}
+.rung .n{font-family:var(--mono); font-size:13px; color:var(--cyan-soft)}
+.rung strong{font-family:var(--display); font-weight:600; font-size:16px; display:block}
+.rung small{color:var(--mist); font-size:13px}
+.rung .w{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--mist-dim);
+  text-transform:uppercase; white-space:nowrap}
+.rung.r1{border-left-color:var(--ok)} .rung.r2{border-left-color:#5BD6B0}
+.rung.r3{border-left-color:var(--blue)} .rung.r4{border-left-color:var(--warn)}
+.rung.r5{border-left-color:var(--danger); opacity:.72}
+
+/* ---------- interaction levels ---------- */
+.levels{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:14px;
+  margin-top:44px}
+.lev{border-radius:14px; padding:22px 20px; min-width:0;
+  border:1px solid var(--line); background:rgba(10,21,48,.6); position:relative; overflow:hidden}
+.lev::after{content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--c)}
+.lev .bar{height:3px; border-radius:999px; background:var(--c); opacity:.35; margin-bottom:16px}
+.lev h3{font-size:16.5px; font-weight:600; color:var(--c); letter-spacing:-.01em}
+.lev p{font-size:13.5px; color:var(--mist); margin-top:8px; line-height:1.55}
+.lev .sev{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--mist-dim); margin-top:14px; display:block}
+
+/* ---------- conflict ---------- */
+.conflict{margin-top:44px; border:1px solid rgba(255,138,61,.35); border-radius:18px;
+  background:linear-gradient(180deg,rgba(32,20,10,.6),rgba(8,17,38,.9)); overflow:hidden}
+.conflict-head{display:flex; align-items:center; gap:12px; padding:16px 22px;
+  border-bottom:1px solid rgba(255,138,61,.25); font-family:var(--mono);
+  font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange)}
+.conflict-head .pulse{width:8px; height:8px; border-radius:50%; background:var(--orange);
+  box-shadow:0 0 0 0 rgba(255,138,61,.6); animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 11px rgba(255,138,61,0)}100%{box-shadow:0 0 0 0 rgba(255,138,61,0)}}
+.vs{display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch}
+.side{padding:24px 22px; min-width:0}
+.side.b{opacity:.68}
+.divider{width:1px; background:var(--line); position:relative}
+.divider span{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-family:var(--mono); font-size:10px; color:var(--mist-dim); background:var(--panel);
+  border:1px solid var(--line); border-radius:999px; padding:5px 9px}
+.side .val{font-family:var(--mono); font-size:clamp(22px,4vw,32px); color:var(--white); margin:10px 0}
+.side.b .val{color:var(--mist); text-decoration:line-through; text-decoration-color:rgba(255,77,109,.6)}
+.verdict{padding:18px 22px; border-top:1px solid rgba(255,138,61,.25);
+  background:rgba(3,7,15,.45); font-size:14px; color:var(--mist)}
+.verdict b{color:var(--ok); font-weight:600}
+
+/* ---------- guardrails ---------- */
+.rules{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;
+  margin-top:44px}
+.rule-card{border:1px solid var(--line); border-radius:14px; padding:24px 20px;
+  background:rgba(10,21,48,.55); min-width:0}
+.rule-card .x{font-family:var(--mono); font-size:19px; color:var(--danger); line-height:1}
+.rule-card h3{font-size:16px; font-weight:600; margin:14px 0 8px}
+.rule-card p{font-size:13.5px; color:var(--mist); line-height:1.55}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line); background:rgba(3,7,15,.6);
+  padding-block:40px; margin-top:40px}
+footer .wrap{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  font-size:13px; color:var(--mist-dim)}
+footer .lockup .wordmark{font-size:17px}
+
+/* ---------- scroll reveal ---------- */
+.reveal{transition:opacity .8s cubic-bezier(.2,.8,.3,1),transform .8s cubic-bezier(.2,.8,.3,1)}
+.reveal.pending{opacity:0; transform:translateY(26px)}
+
+@media (max-width:700px){
+  .a-row{grid-template-columns:1fr; gap:8px}
+  .vs{grid-template-columns:1fr}
+  .divider{width:auto; height:1px}
+  .divider span{background:var(--panel-2)}
+  .rung{grid-template-columns:28px 1fr; gap:12px}
+  .rung .w{grid-column:1/-1; margin-top:4px}
+}
+@media (prefers-reduced-motion:reduce){
+  .splash{animation:splashOut .01s linear forwards}
+  .splash *{animation:none!important; opacity:1!important}
+  .reveal,.reveal.pending{opacity:1!important; transform:none!important; transition:none}
+  .pulse{animation:none}
+}
+</style>
+</head>
+<body>
+<!-- The chips and the answer card run on embedded demo data so the page
+     works standalone. Wire them to POST /api/ask once the pipeline lands. -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="capFill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#2DE2F0" stop-opacity=".55"/>
+    <stop offset="60%" stop-color="#3E8BFF" stop-opacity=".30"/>
+    <stop offset="100%" stop-color="#8B7BF7" stop-opacity=".18"/>
+  </linearGradient>
+  <radialGradient id="seamGlow">
+    <stop offset="0%" stop-color="#C9FBFF" stop-opacity="1"/>
+    <stop offset="55%" stop-color="#2DE2F0" stop-opacity=".55"/>
+    <stop offset="100%" stop-color="#2DE2F0" stop-opacity="0"/>
+  </radialGradient>
+</defs></svg>
+
+<canvas id="plexus" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- ========== SPLASH ========== -->
+<div class="splash" id="splash">
+  <div class="splash-in">
+    <svg class="mark" viewBox="0 0 120 120" role="img" aria-label="Logo Pharmeazor">
+      <g transform="rotate(-34 60 60)">
+        <g id="half-up">
+          <polygon class="wire wire-hull" points="38,58 38,36 39.7,27.6 44.4,20.4 51.6,15.7 60,14 68.4,15.7 75.6,20.4 80.3,27.6 82,36 82,58"/>
+          <path class="facet" d="M60,38 L38,58 M60,38 L38,36 M60,38 L44.4,20.4 M60,38 L60,14 M60,38 L75.6,20.4 M60,38 L82,36 M60,38 L82,58 M60,52 L38,58 M60,52 L82,58 M60,52 L60,38"/>
+          <g class="node">
+            <circle cx="38" cy="36" r="2"/><circle cx="44.4" cy="20.4" r="1.8"/>
+            <circle cx="60" cy="14" r="2.2"/><circle cx="75.6" cy="20.4" r="1.8"/>
+            <circle cx="82" cy="36" r="2"/><circle cx="60" cy="38" r="2.4"/>
+            <circle cx="38" cy="58" r="1.8"/><circle cx="82" cy="58" r="1.8"/>
+          </g>
+        </g>
+        <g id="half-dn">
+          <polygon class="lower" points="38,62 38,84 39.7,92.4 44.4,99.6 51.6,104.3 60,106 68.4,104.3 75.6,99.6 80.3,92.4 82,84 82,62"/>
+          <path class="facet" d="M60,62 L38,84 M60,62 L60,106 M60,62 L82,84 M44.4,99.6 L75.6,99.6"/>
+          <g class="node">
+            <circle cx="38" cy="62" r="1.8"/><circle cx="82" cy="62" r="1.8"/>
+            <circle cx="60" cy="106" r="2"/>
+          </g>
+        </g>
+        <ellipse class="seam" cx="60" cy="60" rx="30" ry="9" fill="url(#seamGlow)"/>
+      </g>
+    </svg>
+
+    <div class="wordmark">Pharme<i>azor</i></div>
+    <div class="tag">&laquo;&nbsp;Chaque réponse, sa source.&nbsp;&raquo;</div>
+    <div class="rule"></div>
+    <button class="enter" id="enter" type="button">Entrer <span aria-hidden="true">&#8595;</span></button>
+  </div>
+</div>
+
+<!-- ========== PAGE ========== -->
+<div class="page">
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="lockup">
+      <svg class="mark" viewBox="0 0 120 120" role="img" aria-label="Pharmeazor">
+        <g transform="rotate(-34 60 60)">
+          <polygon class="wire wire-hull" points="38,54 38,32 39.7,23.6 44.4,16.4 51.6,11.7 60,10 68.4,11.7 75.6,16.4 80.3,23.6 82,32 82,54"/>
+          <path class="facet" d="M60,34 L38,54 M60,34 L60,10 M60,34 L82,54 M60,34 L38,32 M60,34 L82,32"/>
+          <polygon class="lower" points="38,66 38,88 39.7,96.4 44.4,103.6 51.6,108.3 60,110 68.4,108.3 75.6,103.6 80.3,96.4 82,88 82,66"/>
+          <ellipse class="seam" cx="60" cy="60" rx="26" ry="7" fill="url(#seamGlow)"/>
+        </g>
+      </svg>
+      <span class="wordmark">Pharme<i>azor</i></span>
+    </div>
+    <nav class="nav">
+      <a href="#demo">Réponse</a>
+      <a href="#chaine">Chaîne</a>
+      <a href="#sources">Sources</a>
+      <a href="#niveaux">Interactions</a>
+      <a href="#conflit">Réconciliation</a>
+    </nav>
+    <span class="demo-flag">Maquette · données d'exemple</span>
+  </div>
+</header>
+
+<section class="band hero">
+  <div class="wrap">
+    <div class="eyebrow">UC2 · NTIC · IFA — Module RCR, M1 IA</div>
+    <h1>Pharme<i>azor</i></h1>
+    <p class="tag">&laquo;&nbsp;Chaque réponse, sa source.&nbsp;&raquo;</p>
+    <p class="lede">Une base de connaissances médicamenteuse construite à partir de sources multiples — notices, RCP, nomenclature officielle, tableaux d'interactions — et un assistant qui répond au pharmacien en citant le passage exact, en signalant les désaccords entre sources et en bloquant tout chiffre qu'il ne retrouve pas mot pour mot.</p>
+
+    <div class="search">
+      <div class="search-box">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2DE2F0" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>
+        </svg>
+        <label for="q" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Votre question</label>
+        <input id="q" type="text" autocomplete="off" placeholder="Posez votre question au comptoir…">
+        <button class="ask" id="ask" type="button">Interroger</button>
+      </div>
+      <div class="chips" id="chips">
+        <button class="chip" type="button" data-k="dci" aria-pressed="false">Quelle est la DCI de ce nom commercial&nbsp;?</button>
+        <button class="chip" type="button" data-k="inter" aria-pressed="false">Peut-on associer X et Y&nbsp;?</button>
+        <button class="chip" type="button" data-k="refus" aria-pressed="false">Que prendre pour mes douleurs&nbsp;?</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="demo">
+  <div class="wrap">
+    <div class="eyebrow reveal">Format de réponse imposé</div>
+    <h2 class="reveal">Une réponse ne vaut rien<br>sans le passage qui la porte.</h2>
+    <p class="lede reveal">Réponse courte, explication simple, sources citées avec leur niveau d'autorité et leur date de collecte, puis niveau de confiance et limites. Chaque nombre affiché est recherché mot pour mot dans le passage cité ; introuvable, il est bloqué.</p>
+
+    <div style="margin-top:44px" class="reveal">
+      <div class="answer" id="answer">
+        <div class="answer-head">
+          <span class="lvl" id="a-lvl">Niveau 1 — question directe</span>
+          <span class="verified" id="a-ver"><span class="dot"></span> Contrôle des chiffres : 1/1 vérifié</span>
+        </div>
+        <div class="answer-body">
+          <div class="a-row"><div class="k">Réponse</div><div class="v"><p class="short" id="a-short">—</p></div></div>
+          <div class="a-row"><div class="k">Explication</div><div class="v"><p class="expl" id="a-expl">—</p></div></div>
+          <div class="a-row"><div class="k">Sources citées</div><div class="v" id="a-src"></div></div>
+        </div>
+        <div class="answer-foot">
+          <span id="a-conf">Confiance</span>
+          <div class="meter"><span id="a-meter" style="width:0%"></span></div>
+          <span style="font-size:12.5px" id="a-limit">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="chaine">
+  <div class="wrap">
+    <div class="eyebrow reveal">Le fil rouge</div>
+    <h2 class="reveal">La chaîne, brique par brique.</h2>
+    <p class="lede reveal">Le chatbot n'est que la dernière brique. L'essentiel du travail est en amont — collecter, extraire, normaliser — et en aval — vérifier, mesurer.</p>
+    <div class="pipe">
+      <article class="step reveal"><h3>Collecter</h3><p>Au moins trois sources par médicament, dont une officielle. Chaque document garde sa provenance : adresse, date de collecte, langue, niveau d'autorité. Rejouable sans doublons.</p></article>
+      <article class="step reveal"><h3>Extraire</h3><p>Découper indications, contre-indications, posologie et interactions, même quand les titres de rubriques changent d'une notice à l'autre. Les phrases d'origine sont conservées.</p></article>
+      <article class="step reveal"><h3>Normaliser</h3><p>Relier nom commercial, DCI, code ATC, variantes et fautes de frappe vers une même fiche. Les cas ambigus sont signalés, jamais tranchés en silence.</p></article>
+      <article class="step reveal"><h3>Rechercher</h3><p>BM25 contre vecteurs sémantiques, comparés chiffres à l'appui. Les mots-clés ratent les reformulations ; le sens confond parfois deux médicaments proches.</p></article>
+      <article class="step reveal"><h3>Vérifier</h3><p>Un script déterministe extrait chaque nombre et son unité, puis les cherche dans le passage cité. Un chiffre introuvable est bloqué et signalé, jamais affiché comme un fait.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="sources">
+  <div class="wrap">
+    <div class="eyebrow reveal">Règle d'or</div>
+    <h2 class="reveal">Toutes les sources<br>n'ont pas le même poids.</h2>
+    <p class="lede reveal">En cas de contradiction, la source de rang supérieur l'emporte — et le système doit pouvoir dire pourquoi. Une source étrangère complète la source algérienne ; elle ne la remplace jamais.</p>
+    <div class="ladder">
+      <div class="rung r1 reveal"><span class="n">01</span><div><strong>RCP et notices officiels — ANPP</strong><small>Documents validés par l'autorité algérienne. Source prioritaire.</small></div><span class="w">Autorité · officielle</span></div>
+      <div class="rung r2 reveal"><span class="n">02</span><div><strong>Nomenclature officielle</strong><small>Ministère de l'Industrie pharmaceutique : produits enregistrés et identifiants. Ni posologie ni indications.</small></div><span class="w">Autorité · officielle</span></div>
+      <div class="rung r3 reveal"><span class="n">03</span><div><strong>Références institutionnelles étrangères</strong><small>Thésaurus ANSM, DailyMed, EMA. Complément, jamais substitut.</small></div><span class="w">Institutionnelle</span></div>
+      <div class="rung r4 reveal"><span class="n">04</span><div><strong>Sites professionnels algériens</strong><small>Pharm'Net, MEDAlgérie, dzair-pharma. Pratiques, non officiels — toujours signalés comme tels.</small></div><span class="w">Secondaire</span></div>
+      <div class="rung r5 reveal"><span class="n">05</span><div><strong>Forums, blogs, réseaux sociaux</strong><small>Écartés du corpus. Prix, stocks et publicités également.</small></div><span class="w">Écartée</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="niveaux">
+  <div class="wrap">
+    <div class="eyebrow reveal">Thésaurus des interactions — ANSM</div>
+    <h2 class="reveal">Quatre niveaux. Jamais un de moins.</h2>
+    <p class="lede reveal">L'assistant indique toujours le niveau d'une alerte et sa source, et ne transforme jamais un niveau léger en rassurance. « Aucune interaction trouvée » n'est pas « sans risque ».</p>
+    <div class="levels">
+      <article class="lev reveal" style="--c:#FF4D6D"><div class="bar"></div><h3>Contre-indication</h3><p>L'association ne doit pas être faite.</p><span class="sev">Gravité 4 / 4</span></article>
+      <article class="lev reveal" style="--c:#FF8A3D"><div class="bar"></div><h3>Association déconseillée</h3><p>À éviter, sauf nécessité clairement établie.</p><span class="sev">Gravité 3 / 4</span></article>
+      <article class="lev reveal" style="--c:#FFC53D"><div class="bar"></div><h3>Précaution d'emploi</h3><p>Possible, avec surveillance ou ajustement.</p><span class="sev">Gravité 2 / 4</span></article>
+      <article class="lev reveal" style="--c:#7FD3FC"><div class="bar"></div><h3>À prendre en compte</h3><p>Risque à garder en tête.</p><span class="sev">Gravité 1 / 4</span></article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="conflit">
+  <div class="wrap">
+    <div class="eyebrow reveal">Réconciliation</div>
+    <h2 class="reveal">Quand deux sources<br>ne disent pas la même chose.</h2>
+    <p class="lede reveal">Le désaccord n'est pas masqué : il est détecté, affiché, et tranché par le rang de la source — en le disant.</p>
+
+    <div class="conflict reveal">
+      <div class="conflict-head"><span class="pulse"></span> Désaccord détecté · dose maximale sur 24 h</div>
+      <div class="vs">
+        <div class="side a">
+          <span class="rank off">Source officielle</span>
+          <p class="val">4 g / 24 h</p>
+          <p style="font-size:13px;color:var(--mist)">RCP validé par l'autorité — collecté le 12/03/2026</p>
+        </div>
+        <div class="divider"><span>VS</span></div>
+        <div class="side b">
+          <span class="rank sec">Site professionnel</span>
+          <p class="val">3 g / 24 h</p>
+          <p style="font-size:13px;color:var(--mist)">Fiche non officielle — collectée le 04/02/2026</p>
+        </div>
+      </div>
+      <div class="verdict">Le système retient <b>la valeur de la source officielle</b> et affiche la seconde comme divergente, avec son passage et sa date. Il ne supprime jamais la source écartée&nbsp;: il explique pourquoi elle perd.</div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="eyebrow reveal">Périmètre</div>
+    <h2 class="reveal">Ce que Pharmeazor refuse de faire.</h2>
+    <p class="lede reveal">Le système aide à retrouver et à contrôler l'information. La décision reste celle du pharmacien.</p>
+    <div class="rules">
+      <article class="rule-card reveal"><div class="x">01</div><h3>Il ne prescrit ni ne diagnostique</h3><p>Pas de choix de traitement, pas d'ordonnance, pas de conseil médical personnalisé. Une question comme « que prendre pour mes douleurs ? » est refusée, pas contournée.</p></article>
+      <article class="rule-card reveal"><div class="x">02</div><h3>Il n'affiche rien sans source</h3><p>Une information sans passage cité n'apparaît pas. Un chiffre absent du passage est bloqué et signalé plutôt que présenté comme un fait.</p></article>
+      <article class="rule-card reveal"><div class="x">03</div><h3>Il ne devine pas</h3><p>Deux médicaments aux noms très proches ? Le système signale l'ambiguïté et demande une précision, au lieu de trancher en silence.</p></article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="lockup">
+      <svg class="mark" viewBox="0 0 120 120" style="width:26px;height:26px" role="img" aria-label="Pharmeazor">
+        <g transform="rotate(-34 60 60)">
+          <polygon class="wire wire-hull" points="38,54 38,32 39.7,23.6 44.4,16.4 51.6,11.7 60,10 68.4,11.7 75.6,16.4 80.3,23.6 82,32 82,54"/>
+          <polygon class="lower" points="38,66 38,88 39.7,96.4 44.4,103.6 51.6,108.3 60,110 68.4,108.3 75.6,103.6 80.3,96.4 82,88 82,66"/>
+        </g>
+      </svg>
+      <span class="wordmark">Pharme<i>azor</i></span>
+    </div>
+    <div style="max-width:52ch">Maquette d'interface — Projet 2, module RCR. Les contenus affichés sont des exemples de démonstration, non validés pour un usage professionnel.</div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- splash ---------- */
+  var splash = document.getElementById("splash");
+  var dismissed = false;
+  function dismiss(){
+    if(dismissed) return; dismissed = true;
+    splash.classList.add("skip");
+    document.body.classList.remove("locked");
+    setTimeout(function(){ splash.style.visibility = "hidden"; }, 450);
+  }
+  if(reduce){ dismiss(); }
+  else {
+    document.body.classList.add("locked");
+    setTimeout(function(){ document.body.classList.remove("locked"); dismissed = true; }, 5400);
+    var btn = document.getElementById("enter");
+    if(btn) btn.addEventListener("click", dismiss);
+    splash.addEventListener("click", function(e){ if(e.target === splash) dismiss(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") dismiss(); });
+  }
+
+  /* ---------- plexus ---------- */
+  var cv = document.getElementById("plexus"), cx = cv.getContext("2d");
+  var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var pts = [], mouse = {x:-9999, y:-9999}, energy = 0, lastY = window.scrollY || 0;
+
+  function size(){
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var target = Math.round(Math.min(110, Math.max(34, (W * H) / 15000)));
+    pts = [];
+    for(var i = 0; i < target; i++){
+      pts.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22,
+        r: Math.random() * 1.5 + .6
+      });
+    }
+  }
+
+  function frame(){
+    cx.clearRect(0, 0, W, H);
+    var link = 148, boost = 1 + energy * 2.2;
+    for(var i = 0; i < pts.length; i++){
+      var p = pts[i];
+      p.x += p.vx * boost; p.y += p.vy * boost;
+      if(p.x < -40) p.x = W + 40; if(p.x > W + 40) p.x = -40;
+      if(p.y < -40) p.y = H + 40; if(p.y > H + 40) p.y = -40;
+
+      var dmx = mouse.x - p.x, dmy = mouse.y - p.y;
+      var dm = Math.sqrt(dmx * dmx + dmy * dmy);
+      if(dm < 190){
+        var pull = (1 - dm / 190) * .018;
+        p.x += dmx * pull; p.y += dmy * pull;
+        cx.strokeStyle = "rgba(45,226,240," + ((1 - dm / 190) * .22).toFixed(3) + ")";
+        cx.lineWidth = .7;
+        cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(mouse.x, mouse.y); cx.stroke();
+      }
+
+      for(var j = i + 1; j < pts.length; j++){
+        var q = pts[j], dx = p.x - q.x, dy = p.y - q.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if(d < link){
+          var a = (1 - d / link) * (.16 + energy * .3);
+          cx.strokeStyle = "rgba(125,200,255," + a.toFixed(3) + ")";
+          cx.lineWidth = .65;
+          cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(q.x, q.y); cx.stroke();
+        }
+      }
+      cx.fillStyle = "rgba(160,235,255," + (.42 + energy * .4).toFixed(3) + ")";
+      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.2832); cx.fill();
+    }
+    energy *= .94;
+    requestAnimationFrame(frame);
+  }
+
+  size();
+  window.addEventListener("resize", size);
+  window.addEventListener("pointermove", function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener("pointerleave", function(){ mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener("scroll", function(){
+    var y = window.scrollY || 0;
+    energy = Math.min(1, energy + Math.abs(y - lastY) / 420);
+    lastY = y;
+  }, {passive:true});
+
+  if(reduce){
+    // one static frame, no loop
+    (function(){ var e = energy; energy = 0; cx.clearRect(0,0,W,H);
+      for(var i=0;i<pts.length;i++){ var p=pts[i];
+        for(var j=i+1;j<pts.length;j++){ var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+          if(d<148){ cx.strokeStyle="rgba(125,200,255,"+((1-d/148)*.16).toFixed(3)+")"; cx.lineWidth=.65;
+            cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.stroke(); } }
+        cx.fillStyle="rgba(160,235,255,.42)"; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,6.2832); cx.fill(); }
+      energy = e; })();
+  } else {
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- scroll reveal ---------- */
+  if(!reduce && "IntersectionObserver" in window){
+    var items = document.querySelectorAll(".reveal");
+    for(var k = 0; k < items.length; k++) items[k].classList.add("pending");
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en, idx){
+        if(en.isIntersecting){
+          var el = en.target;
+          setTimeout(function(){ el.classList.remove("pending"); }, idx * 70);
+          io.unobserve(el);
+        }
+      });
+    }, {rootMargin:"0px 0px -12% 0px", threshold:.12});
+    for(var m = 0; m < items.length; m++) io.observe(items[m]);
+  }
+
+  /* ---------- demo answers ---------- */
+  var DATA = {
+    dci: {
+      q: "Quelle est la DCI de ce nom commercial ?",
+      lvl: "Niveau 1 — question directe",
+      ver: "Contrôle des chiffres : aucun chiffre à vérifier",
+      short: 'La DCI est le <span class="num">paracétamol</span>.',
+      expl: "Le nom saisi est un nom commercial. La fiche normalisée le relie à sa dénomination commune internationale et à son code ATC, avec les variantes d'écriture rencontrées dans le corpus.",
+      srcs: [
+        {n:"Nomenclature officielle — Ministère de l'Industrie pharmaceutique", r:"off", rl:"Officielle", d:"collecté le 12/03/2026",
+         q:'Dénomination commune internationale : <mark>paracétamol</mark> — forme : comprimé — voie : orale.'},
+        {n:"RCP — ANPP", r:"off", rl:"Officielle", d:"collecté le 12/03/2026",
+         q:'Chaque comprimé contient du <mark>paracétamol</mark> comme substance active.'}
+      ],
+      conf: "Confiance élevée", pct: 92, limit: "Deux sources officielles concordent."
+    },
+    inter: {
+      q: "Peut-on associer X et Y ? Quel est le niveau de l'interaction ?",
+      lvl: "Niveau 2 — question croisée",
+      ver: "Contrôle des chiffres : 0/0 — aucune valeur numérique avancée",
+      short: 'Association <span class="num" style="color:#FF8A3D;border-color:rgba(255,138,61,.4);background:rgba(255,138,61,.1)">déconseillée</span> — niveau 3 / 4.',
+      expl: "Deux documents couvrent cette association. Le tableau institutionnel donne le niveau ; la notice officielle confirme la mise en garde. Le niveau le plus sévère trouvé est retenu et affiché tel quel, sans adoucissement.",
+      srcs: [
+        {n:"Thésaurus des interactions médicamenteuses — ANSM", r:"inst", rl:"Institutionnelle", d:"collecté le 28/02/2026",
+         q:'Niveau de contrainte : <mark>association déconseillée</mark>. Majoration du risque hémorragique.'},
+        {n:"RCP — ANPP", r:"off", rl:"Officielle", d:"collecté le 12/03/2026",
+         q:'Mise en garde : surveillance renforcée en cas d\'association, <mark>risque hémorragique</mark> accru.'}
+      ],
+      conf: "Confiance moyenne", pct: 68,
+      limit: "Source étrangère pour le niveau : complément, pas substitut à la source algérienne."
+    },
+    refus: {
+      q: "Quel médicament prendre pour mes douleurs ?",
+      lvl: "Hors périmètre — refus",
+      ver: "Aucune réponse produite",
+      short: "Je ne peux pas répondre à cette question.",
+      expl: "Choisir un traitement pour une personne relève du diagnostic et de la prescription — hors du périmètre du système. Pharmeazor retrouve et contrôle l'information présente dans les sources ; la décision revient au pharmacien ou au médecin.",
+      srcs: [],
+      conf: "Refus assumé", pct: 0,
+      limit: "Reformulez autour d'un médicament précis : indications, posologie, interactions, équivalents."
+    }
+  };
+
+  var elShort = document.getElementById("a-short"), elExpl = document.getElementById("a-expl"),
+      elSrc = document.getElementById("a-src"), elLvl = document.getElementById("a-lvl"),
+      elVer = document.getElementById("a-ver"), elConf = document.getElementById("a-conf"),
+      elMeter = document.getElementById("a-meter"), elLimit = document.getElementById("a-limit"),
+      card = document.getElementById("answer"), input = document.getElementById("q");
+
+  function render(key){
+    var d = DATA[key]; if(!d) return;
+    elLvl.textContent = d.lvl;
+    elVer.innerHTML = '<span class="dot"></span> ' + d.ver;
+    elShort.innerHTML = d.short;
+    elExpl.textContent = d.expl;
+    elConf.textContent = d.conf;
+    elLimit.textContent = d.limit;
+    card.classList.toggle("refusal", key === "refus");
+    var html = "";
+    if(!d.srcs.length){
+      html = '<p class="expl" style="font-size:14px">Aucune source citée : le système n\'avance rien.</p>';
+    } else {
+      d.srcs.forEach(function(s){
+        html += '<div class="src"><div class="src-top"><span class="src-name">' + s.n +
+                '</span><span class="rank ' + s.r + '">' + s.rl + '</span>' +
+                '<span class="src-date">' + s.d + '</span></div>' +
+                '<p class="quote">' + s.q + '</p></div>';
+      });
+    }
+    elSrc.innerHTML = html;
+    elMeter.style.width = d.pct + "%";
+    var chips = document.querySelectorAll(".chip");
+    for(var i = 0; i < chips.length; i++)
+      chips[i].setAttribute("aria-pressed", chips[i].getAttribute("data-k") === key ? "true" : "false");
+  }
+
+  render("dci");
+
+  document.getElementById("chips").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    var k = c.getAttribute("data-k");
+    input.value = DATA[k].q;
+    render(k);
+    document.getElementById("demo").scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+  });
+
+  function run(){
+    var v = (input.value || "").toLowerCase();
+    var k = "dci";
+    if(/douleur|mal |que prendre|conseil|soigner/.test(v)) k = "refus";
+    else if(/associ|interact|avec|ensemble|combin/.test(v)) k = "inter";
+    render(k);
+    document.getElementById("demo").scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+  }
+  document.getElementById("ask").addEventListener("click", run);
+  input.addEventListener("keydown", function(e){ if(e.key === "Enter") run(); });
+})();
+</script>
+</body>
+</html>

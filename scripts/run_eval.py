@@ -40,7 +40,7 @@ def main() -> int:
 
     print(f"Jeu de test : {len(questions)} question(s)")
     print(f"  dont {len(todo)} encore a annoter")
-    print(f"Objectif du cahier des charges : au moins 30 questions annotees\n")
+    print("Objectif du cahier des charges : au moins 30 questions annotees\n")
 
     by_level: dict[str, int] = {}
     for q in questions:

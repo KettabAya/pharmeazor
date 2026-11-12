@@ -64,6 +64,13 @@ même code deux fois. Découpez par **type de source**.
 
 ### A — la source structurée (le tableur)
 
+> **État : A1 → A5 sont implémentées et testées.** Le code est dans
+> `src/pharmeazor/normalize/dosage.py` et `catalogue.py`, les sorties dans
+> `data/reference/`. Lancez `python scripts/build_week1.py` pour tout
+> reconstruire. Il reste à **relire et comprendre** ce code : c'est vous qui le
+> présenterez, et A1 — la vérification du CSV contre l'Excel — n'a pas été faite
+> et ne peut pas l'être à votre place.
+
 Vous partez du CSV déjà extrait.
 
 | # | Tâche | Terminé quand |

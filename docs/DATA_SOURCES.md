@@ -22,7 +22,7 @@ Elle n'est jamais contournée.
 | RCP et notices ANPP | 4 — officielle | *à remplir* | *à remplir* | source prioritaire |
 | Nomenclature (Ministère de l'Industrie pharmaceutique) | 3 — officielle | *à remplir* | accès automatique interdit | téléchargement manuel |
 | Thésaurus des interactions — ANSM | 2 — institutionnelle | *à remplir* | *à remplir* | complément, jamais substitut |
-| DailyMed | 2 — institutionnelle | *à remplir* | *à remplir* | notice américaine, peut différer |
+| DailyMed | 2 — institutionnelle | 2026-11-13 | accès interdit au corpus (droits non confirmés) | robots.txt : seul /archives/ est interdit. Droits de réutilisation des labels fournis par les sociétés non confirmés. Ne pas intégrer ni redistribuer sans vérification. |
 | EMA | 2 — institutionnelle | *à remplir* | *à remplir* | notice européenne, peut différer |
 | Pharm'Net (e-Sahti) | 1 — secondaire | 2026-11-13 | accès manuel uniquement | robots.txt : accès autorisé aux chemins publics, chemins privés et administratifs interdits. CGU : aucun lien identifié sur la page d'accueil lors de la vérification du 13/11/2026. Conditions d'utilisation non confirmées. |
 | VIDAL | 0 — écartée | 2026-11-13 | forbidden | CGU : reproduction intégrale ou partielle interdite sans consentement. Source exclue faute d'autorisation de réutilisation. |

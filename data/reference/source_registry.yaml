@@ -43,9 +43,10 @@ sources:
     name: "DailyMed - notices officielles americaines"
     base_url: "https://dailymed.nlm.nih.gov/"
     authority: INSTITUTIONAL
-    access: manual
-    robots_checked_on: null
-    terms_note: "API publique disponible. Conditions de reutilisation a verifier."
+    access: forbidden
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt interdit uniquement le chemin /archives/."
+    terms_note: "Droits de reutilisation des labels fournis par les societes non confirmes. Ne pas integrer au corpus ni redistribuer sans verification des droits."
     country: US
     language: en
 

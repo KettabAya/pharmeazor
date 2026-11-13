@@ -11,12 +11,12 @@
 sources:
   - source_id: anpp_rcp
     name: "RCP et notices officiels - ANPP"
-    base_url: "https://anpp.dz/"
+    base_url: "https://rcp.anpp.dz/"
     authority: OFFICIAL
     access: manual
-    robots_checked_on: null
-    robots_note: "A verifier avant toute collecte automatique."
-    terms_note: "Documents officiels valides en Algerie. Source prioritaire."
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt autorise tous les chemins publics (Disallow vide)."
+    terms_note: "Aucun lien CGU ou mentions legales identifie sur la page d’accueil. Conditions de reutilisation non confirmees. Collecte manuelle uniquement; verifier les droits avant redistribution."
     country: DZ
 
   - source_id: nomenclature

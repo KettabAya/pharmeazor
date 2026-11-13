@@ -19,7 +19,7 @@ Elle n'est jamais contournée.
 
 | Source | Rang | robots.txt lu le | Verdict | Conclusion |
 |---|---|---|---|---|
-| RCP et notices ANPP | 4 — officielle | *à remplir* | *à remplir* | source prioritaire |
+| RCP et notices ANPP | 4 — officielle | 2026-11-13 | accès manuel uniquement | robots.txt : aucun chemin interdit. Aucun lien CGU ou mentions légales identifié sur la page d’accueil; conditions de réutilisation non confirmées. Vérifier les droits avant redistribution. |
 | Nomenclature (Ministère de l'Industrie pharmaceutique) | 3 — officielle | *à remplir* | accès automatique interdit | téléchargement manuel |
 | Thésaurus des interactions — ANSM | 2 — institutionnelle | *à remplir* | *à remplir* | complément, jamais substitut |
 | DailyMed | 2 — institutionnelle | 2026-11-13 | accès interdit au corpus (droits non confirmés) | robots.txt : seul /archives/ est interdit. Droits de réutilisation des labels fournis par les sociétés non confirmés. Ne pas intégrer ni redistribuer sans vérification. |

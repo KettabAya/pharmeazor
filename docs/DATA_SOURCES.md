@@ -61,3 +61,22 @@ Un même médicament peut avoir une notice différente d'un pays à l'autre, car
 autorité valide son propre texte. Une source étrangère sert de complément, **jamais** de
 substitut à la source algérienne. Le code applique cette règle dans
 `ConflictPolicy.prefer_algerian`.
+
+## État du corpus documentaire — semaine 1
+
+### Paracétamol — DOLIPRANE 2,4 %
+
+| Document | Source | Type | Rubriques extraites |
+|---|---|---|---:|
+| `paracetamol_doliprane_2.4_rcp` | ANPP (DZ) | RCP officiel | 5/5 |
+| `paracetamol_doliprane_2.4_notice` | Pharm'Net (DZ) | Notice patient | 2/5 |
+
+Le RCP officiel couvre les indications, la posologie, les contre-indications,
+les interactions et les effets indésirables.
+
+La notice patient est conservée comme document complémentaire. Son extraction
+partielle (posologie et effets indésirables) est rapportée telle quelle ;
+elle n'est pas assimilée à une fiche professionnelle.
+
+Les fichiers PDF, TXT et JSON du corpus sont conservés localement dans
+`data/raw/notices/`, dossier exclu du suivi Git.

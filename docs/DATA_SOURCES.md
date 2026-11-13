@@ -80,3 +80,18 @@ elle n'est pas assimilée à une fiche professionnelle.
 
 Les fichiers PDF, TXT et JSON du corpus sont conservés localement dans
 `data/raw/notices/`, dossier exclu du suivi Git.
+
+
+### Amoxicilline — BIOPAMOX / AMOXICILLINE BGR
+
+| Document | Source | Type | Rubriques extraites |
+|---|---|---|---:|
+| `amoxicilline_biopamox_rcp` | Pharm'Net (DZ) | RCP professionnel | 5/5 |
+| `amoxicilline_bgr_1g_notice` | ANSM / BDPM (FR) | Notice patient officielle | 5/5 |
+
+Le RCP BIOPAMOX est un document professionnel hébergé par Pharm'Net.
+La notice AMOXICILLINE BGR est une notice patient officielle française,
+conservée comme source complémentaire et non comme substitut à une source algérienne.
+
+Les deux documents concernent des présentations pharmaceutiques différentes.
+Leurs informations de dosage ne doivent pas être fusionnées.

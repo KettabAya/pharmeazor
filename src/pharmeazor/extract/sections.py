@@ -38,7 +38,7 @@ HEADING_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
         r"|effets? secondaires?)", re.I)),
 ]
 
-_HEADING_SHAPE = re.compile(r"^\s*(?:\d[\d.]*\s*[-–.)]?\s*)?[^\n]{3,90}$")
+_HEADING_SHAPE = re.compile(r"^\s*(?:\d[\d.]*\s*[-–.)]?\s*)?[^\n]{3,180}$")
 
 
 def _strip_accents(text: str) -> str:
@@ -49,7 +49,7 @@ def _strip_accents(text: str) -> str:
 def _looks_like_heading(line: str) -> bool:
     """Heuristics for a heading: short, no sentence-ending period, not a list item."""
     stripped = line.strip()
-    if not stripped or len(stripped) > 90:
+    if not stripped or len(stripped) > 180:
         return False
     if stripped.endswith((".", ";", ",")):
         return False

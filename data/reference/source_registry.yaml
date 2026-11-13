@@ -67,6 +67,17 @@ sources:
     robots_note: "robots.txt autorise les chemins publics et interdit certains chemins prives et administratifs."
     terms_note: "Aucun lien CGU identifie sur la page d'accueil lors de la verification du 13/11/2026. Conditions d'utilisation non confirmees. Collecte manuelle uniquement."
     country: DZ
+  - source_id: vidal
+    name: "VIDAL - Base de donnees medicamenteuse"
+    base_url: "https://www.vidal.fr/"
+    authority: PROFESSIONAL
+    access: forbidden
+    robots_checked_on: "2026-11-13"
+    robots_note: "Pages medicaments publiques non interdites explicitement; certains chemins sont interdits."
+    terms_note: "Reproduction integrale ou partielle sans consentement interdite selon les CGU. Source exclue faute d autorisation de reutilisation."
+    country: FR
+    language: fr
+
   - source_id: medalgerie
     name: "MEDAlgerie"
     base_url: "https://www.medalgerie.com/"

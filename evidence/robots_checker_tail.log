@@ -1,0 +1,22 @@
+2026-11-11 21:24:46 | INFO     | Checking website: MHRA
+2026-11-11 21:24:46 | INFO     | Website URL: https://products.mhra.gov.uk/
+2026-11-11 21:24:46 | DEBUG    | Robots URL: https://products.mhra.gov.uk/robots.txt
+2026-11-11 21:24:48 | DEBUG    | HTTP response: MHRA | Status: 200
+2026-11-11 21:24:48 | DEBUG    | Final response URL: https://products.mhra.gov.uk/robots.txt
+2026-11-11 21:24:48 | DEBUG    | Robots content length: 66 characters
+2026-11-11 21:24:48 | INFO     | ALLOWED PATHS | MHRA | []
+2026-11-11 21:24:48 | INFO     | DISALLOWED PATHS | MHRA | []
+2026-11-11 21:24:48 | INFO     | ROBOTS ALLOWED URL: https://products.mhra.gov.uk/
+2026-11-11 21:24:48 | DEBUG    | Crawl delay: None
+2026-11-11 21:24:48 | DEBUG    | Request rate: None
+2026-11-11 21:24:48 | INFO     | RESULT | Name: MHRA | URL: https://products.mhra.gov.uk/ | Authority: 3 | Robots: https://products.mhra.gov.uk/robots.txt | URL Allowed: True
+2026-11-11 21:24:48 | INFO     | Results saved: .../data\metadata\robots_audit.json
+2026-11-11 21:24:48 | INFO     | ============================================================
+2026-11-11 21:24:48 | INFO     | AUDIT SUMMARY
+2026-11-11 21:24:48 | INFO     | ============================================================
+2026-11-11 21:24:48 | INFO     | Total websites: 10
+2026-11-11 21:24:48 | INFO     | Robots allowed: 8
+2026-11-11 21:24:48 | INFO     | Robots denied: 0
+2026-11-11 21:24:48 | INFO     | Unknown status: 2
+2026-11-11 21:24:48 | WARNING  | Review website terms of use before collection.
+2026-11-11 21:24:48 | INFO     | Audit completed successfully

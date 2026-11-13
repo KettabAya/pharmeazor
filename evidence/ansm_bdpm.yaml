@@ -1,0 +1,10 @@
+  - source_id: ansm_bdpm
+    name: "Base de donnees publique des medicaments - ANSM"
+    base_url: "https://base-donnees-publique.medicaments.gouv.fr/"
+    authority: OFFICIAL
+    access: manual
+    robots_checked_on: null
+    robots_note: "robots.txt non verifie. Consultation et collecte manuelles uniquement."
+    terms_note: "Les donnees brutes telechargeables sont reutilisables sous conditions: attribution de la source et de la date de mise a jour, sans alteration. La licence des donnees brutes ne doit pas etre presumee applicable aux notices/RCP complets; verifier les droits documentaires avant redistribution."
+    country: FR
+    language: fr

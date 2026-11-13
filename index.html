@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Proofs of work for the Pharmeazor team - Projet 2, module RCR, M1 IA, Universite Constantine 2.">
+<meta name="theme-color" content="#060D1F">
+<meta property="og:title" content="Pharmeazor - Proofs of work">
+<meta property="og:description" content="Proofs of work for the Pharmeazor team - Projet 2, module RCR, M1 IA, Universite Constantine 2.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060D1F'/%3E%3Cg transform='rotate(-34 16 16)'%3E%3Crect x='10' y='5' width='12' height='22' rx='6' fill='none' stroke='%232DE2F0' stroke-width='2'/%3E%3Cpath d='M10 16h12' stroke='%238FF2FB' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E">
+<title>Pharmeazor Proofs of Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}
+
+/* Layout concept: a single scrolling column of full-bleed bands over a fixed
+   plexus wash — a roster strip, then one section per member.
+   Single dark theme by design: this reuses the Pharmeazor instrument palette. */
+:root{
+  --ink:#03070F; --ink-2:#060D1F; --panel:#0A1530; --panel-2:#0E1C3C;
+  --line:rgba(125,185,255,.14); --line-2:rgba(125,185,255,.28);
+  --cyan:#2DE2F0; --cyan-soft:#8FF2FB; --blue:#3E8BFF; --violet:#8B7BF7;
+  --mist:#9FB6D6; --mist-dim:#6E86A8; --white:#EAF4FF;
+  --ok:#34D399; --warn:#FFC53D; --danger:#FF4D6D;
+  --display:"Space Grotesk",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ink-2); color:var(--white);
+  font-family:var(--body); font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(90% 55% at 50% -8%, rgba(45,226,240,.12) 0%, transparent 62%),
+    radial-gradient(70% 50% at 92% 18%, rgba(139,123,247,.10) 0%, transparent 60%),
+    linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 38%, var(--ink) 100%);
+}
+.page{position:relative; z-index:1}
+h1,h2,h3,h4{font-family:var(--display); text-wrap:balance; margin:0; line-height:1.12}
+p{margin:0}
+a{color:var(--cyan-soft); text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--cyan); outline-offset:3px; border-radius:4px}
+
+.wrap{max-width:1080px; margin-inline:auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(44px,6vw,74px)}
+.rule{height:1px; background:linear-gradient(90deg,transparent,var(--line-2),transparent)}
+
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--cyan); display:flex; align-items:center;
+  gap:10px; margin-bottom:16px}
+.eyebrow::before{content:""; width:24px; height:1px; background:var(--cyan); opacity:.6}
+.lede{color:var(--mist); max-width:64ch; font-size:clamp(15px,1.5vw,17px)}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+.masthead{padding-block:clamp(40px,7vw,80px) clamp(28px,4vw,44px)}
+.lockup{display:flex; align-items:center; gap:14px; margin-bottom:clamp(26px,4vw,40px)}
+.lockup svg{width:52px; height:52px; flex:none;
+  filter:drop-shadow(0 0 16px rgba(45,226,240,.3))}
+.wordmark{font-family:var(--display); font-weight:600; font-size:21px;
+  letter-spacing:-.025em; line-height:1.2}
+.wordmark i{font-style:normal; color:var(--cyan)}
+.wordmark small{display:block; font-family:var(--mono); font-size:10.5px;
+  font-weight:400; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--mist-dim); margin-top:3px}
+.masthead h1{font-size:clamp(34px,6vw,58px); font-weight:600; letter-spacing:-.03em}
+.masthead .lede{margin-top:20px}
+
+/* ---------- roster ---------- */
+.roster{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{display:flex; flex-direction:column; gap:12px; min-width:0;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line); border-radius:14px; padding:20px;
+  text-decoration:none; color:inherit; transition:border-color .2s, transform .2s}
+a.card:hover{border-color:var(--line-2); transform:translateY(-2px)}
+.card .who{font-family:var(--display); font-weight:600; font-size:17.5px; letter-spacing:-.01em}
+.card .role{font-size:13.5px; color:var(--mist); line-height:1.5}
+.card .tag{margin-top:auto; font-family:var(--mono); font-size:10.5px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--cyan)}
+
+/* ---------- member section ---------- */
+.member{padding-block:clamp(44px,6vw,72px)}
+.member-head{margin-bottom:32px}
+.member-head h2{font-size:clamp(27px,3.8vw,40px); font-weight:600; letter-spacing:-.025em}
+.member-head .role{color:var(--mist); margin-top:12px; max-width:62ch}
+.jump{display:inline-flex; align-items:center; gap:9px; margin-top:18px;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; text-decoration:none; color:var(--ink);
+  background:var(--cyan); padding:10px 16px; border-radius:999px;
+  transition:filter .18s, transform .18s}
+.jump:hover{filter:brightness(1.12); transform:translateY(-1px)}
+.jump::after{content:"↓"; font-size:13px}
+
+.tiles{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  margin-bottom:34px}
+.tile{background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:16px 18px; min-width:0}
+.tile .v{font-family:var(--display); font-size:clamp(23px,3vw,29px); font-weight:600;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.1}
+.tile .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--mist-dim); margin-top:8px}
+.tile.accent .v{color:var(--cyan)}
+
+h3.sec{font-size:19px; font-weight:600; letter-spacing:-.01em; margin-top:44px;
+  padding-top:22px; border-top:1px solid var(--line)}
+h3.sec + p{margin-top:12px; color:var(--mist); max-width:64ch; font-size:15px}
+code{font-family:var(--mono); font-size:12.5px; color:var(--cyan-soft);
+  background:rgba(45,226,240,.07); padding:1px 5px; border-radius:4px;
+  overflow-wrap:anywhere}
+
+/* bullet list of what was built */
+.built{list-style:none; padding:0; margin:22px 0 0; display:grid; gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.built li{background:var(--panel); padding:18px 20px; display:grid; gap:6px 18px;
+  grid-template-columns:34px 1fr; align-items:start; min-width:0}
+.built .no{font-family:var(--mono); font-size:12px; color:var(--cyan); padding-top:3px}
+.built .t{font-family:var(--display); font-weight:600; font-size:15.5px; min-width:0}
+.built .d{grid-column:2; color:var(--mist); font-size:14.5px; line-height:1.55; min-width:0}
+
+/* tables */
+.tbl-scroll{overflow-x:auto; margin-top:22px; border:1px solid var(--line);
+  border-radius:12px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:14px}
+th,td{text-align:left; padding:12px 16px; border-bottom:1px solid var(--line);
+  vertical-align:top}
+th{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--mist-dim); font-weight:400; white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
+.verdict{font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; white-space:nowrap}
+.verdict.keep{color:var(--warn)} .verdict.pass{color:var(--ok)} .verdict.fix{color:var(--cyan)}
+.note{color:var(--mist); font-size:13px; display:block; margin-top:4px}
+
+/* rules callout */
+.rules{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(238px,1fr));
+  margin-top:24px}
+.rule-card{background:linear-gradient(180deg,rgba(45,226,240,.07),transparent);
+  border:1px solid var(--line-2); border-left:2px solid var(--cyan);
+  border-radius:0 12px 12px 0; padding:16px 18px; min-width:0}
+.rule-card b{display:block; font-family:var(--display); font-size:15px; margin-bottom:6px}
+.rule-card span{color:var(--mist); font-size:14px; line-height:1.55}
+
+/* screenshots */
+.shots{display:grid; gap:20px; margin-top:22px}
+figure{margin:0; min-width:0}
+figure img{display:block; width:100%; max-width:100%; border:1px solid var(--line);
+  border-radius:12px; background:var(--ink)}
+figcaption{color:var(--mist-dim); font-size:13px; margin-top:10px; line-height:1.5}
+figcaption b{color:var(--mist); font-weight:500; font-family:var(--mono);
+  font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+  display:block; margin-bottom:4px; color:var(--cyan)}
+
+/* ---------- notebook viewer ---------- */
+.nb{margin-top:18px; border:1px solid var(--cyan); border-radius:12px;
+  background:linear-gradient(180deg,rgba(45,226,240,.10),rgba(45,226,240,.03));
+  overflow:hidden; box-shadow:0 0 0 4px rgba(45,226,240,.06)}
+.nb > summary{cursor:pointer; list-style:none; padding:18px 20px; display:flex;
+  gap:8px 16px; align-items:center; min-width:0; transition:background .18s}
+.nb > summary:hover{background:rgba(45,226,240,.07)}
+.nb > summary::-webkit-details-marker{display:none}
+.nb > summary:focus-visible{outline:2px solid var(--cyan); outline-offset:-3px}
+.nb > summary .chev{flex:none; width:22px; height:22px; border-radius:50%;
+  border:1px solid var(--cyan); position:relative; transition:transform .22s}
+.nb > summary .chev::after{content:""; position:absolute; inset:0; margin:auto;
+  width:6px; height:6px; border-right:1.5px solid var(--cyan);
+  border-bottom:1.5px solid var(--cyan); transform:translateY(-2px) rotate(45deg)}
+.nb[open] > summary .chev{transform:rotate(180deg)}
+.nb > summary .lbl{font-family:var(--display); font-weight:600; font-size:16px;
+  color:var(--white); min-width:0; flex:1}
+.nb > summary .lbl em{display:block; font-style:normal; font-family:var(--body);
+  font-weight:400; font-size:13.5px; color:var(--mist); margin-top:3px}
+.nb > summary .hint{flex:none; font-family:var(--mono); font-size:11px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--cyan)}
+.nb[open] > summary{border-bottom:1px solid var(--line-2)}
+.nb[open]{background:var(--panel)}
+.nb-body{padding:6px clamp(14px,2.4vw,22px) 22px}
+.nb-raw{display:block; padding:0 clamp(14px,2.4vw,22px) 18px;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.03em}
+
+.nb-cell{padding-block:14px; border-top:1px solid var(--line); min-width:0}
+.nb-cell:first-child{border-top:none}
+.nb-md{color:var(--white); font-size:14.5px; line-height:1.62; min-width:0}
+.nb-md h1{font-size:21px; margin:14px 0 8px} .nb-md h1:first-child{margin-top:4px}
+.nb-md h2{font-size:17.5px; margin:14px 0 8px}
+.nb-md h3{font-size:15.5px; margin:12px 0 6px}
+.nb-md p{margin:8px 0; color:var(--mist); max-width:72ch}
+.nb-md strong{color:var(--white); font-weight:600}
+.nb-md ul,.nb-md ol{color:var(--mist); margin:8px 0; padding-left:20px}
+.nb-md li{margin:4px 0}
+.nb-md hr{border:none; border-top:1px solid var(--line); margin:16px 0}
+.nb-md blockquote{margin:12px 0; padding:10px 16px; color:var(--mist);
+  border-left:2px solid var(--cyan); background:rgba(45,226,240,.05);
+  border-radius:0 8px 8px 0}
+.nb-md blockquote p{margin:4px 0}
+.nb-md table{margin:10px 0; font-size:13.5px}
+.nb-md th,.nb-md td{padding:8px 12px}
+.nb-md code{font-size:12.5px}
+.nb-md pre{overflow-x:auto}
+
+.nb-io{display:grid; grid-template-columns:62px 1fr; gap:0 12px; min-width:0}
+.nb-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  color:var(--mist-dim); padding-top:14px; text-align:right; white-space:nowrap}
+.nb-tag.in{color:var(--cyan)}
+.nb-src,.nb-out{margin:0; min-width:0; overflow-x:auto; border-radius:10px;
+  font-family:var(--mono); font-size:12.5px; line-height:1.6; padding:12px 14px}
+.nb-src{background:var(--ink); border:1px solid var(--line); color:var(--white)}
+.nb-out{background:rgba(3,7,15,.45); border:1px solid var(--line);
+  color:var(--mist); margin-top:8px; white-space:pre}
+.nb-out.tbl{white-space:normal; padding:0; overflow-x:auto}
+.nb-out.tbl table{border-collapse:collapse; width:auto; min-width:100%;
+  font-family:var(--mono); font-size:12px}
+.nb-out.tbl th,.nb-out.tbl td{padding:7px 12px; border-bottom:1px solid var(--line);
+  white-space:nowrap; text-align:left; color:var(--mist)}
+.nb-out.tbl thead th{color:var(--cyan-soft); position:sticky; top:0; background:var(--panel)}
+.nb-out.tbl tbody th{color:var(--mist-dim)}
+.nb-status{padding:26px 4px; color:var(--mist-dim); font-size:14px}
+
+/* ---------- evidence blocks ---------- */
+.ev-log{margin:22px 0 0; padding:16px 18px; border:1px solid var(--line);
+  border-radius:12px; background:var(--ink); color:var(--mist);
+  font-family:var(--mono); font-size:12px; line-height:1.65;
+  overflow-x:auto; white-space:pre}
+.ev-code{padding-block:16px; border-top:1px solid var(--line); min-width:0}
+.ev-code:first-child{border-top:none}
+.ev-code .ev-name{font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--cyan); margin-bottom:10px;
+  display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline}
+.ev-code .ev-name span{color:var(--mist-dim); letter-spacing:.04em; text-transform:none}
+.ev-code pre{margin:0; overflow-x:auto; max-height:460px; overflow-y:auto;
+  background:var(--ink); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; font-family:var(--mono); font-size:12.5px; line-height:1.6}
+.lvl{display:inline-block; font-family:var(--mono); font-size:10.5px;
+  letter-spacing:.08em; padding:3px 8px; border-radius:5px; white-space:nowrap}
+.lvl-1{color:var(--cyan); background:rgba(45,226,240,.12); border:1px solid rgba(45,226,240,.35)}
+.lvl-2{color:var(--blue); background:rgba(62,139,255,.12); border:1px solid rgba(62,139,255,.32)}
+.lvl-3{color:var(--violet); background:rgba(139,123,247,.12); border:1px solid rgba(139,123,247,.32)}
+td .host{color:var(--mist-dim); font-family:var(--mono); font-size:11.5px;
+  display:block; margin-top:3px; overflow-wrap:anywhere}
+.field{font-family:var(--mono); font-size:11.5px; color:var(--mist-dim);
+  white-space:nowrap}
+
+/* minimal python highlighting, palette-matched */
+.hljs-keyword,.hljs-built_in{color:#FF8A3D}
+.hljs-string,.hljs-meta .hljs-string{color:#8FF2FB}
+.hljs-number{color:#8B7BF7}
+.hljs-comment{color:var(--mist-dim); font-style:italic}
+.hljs-title,.hljs-title.function_{color:#3E8BFF}
+.hljs-params{color:var(--white)}
+.hljs-attr,.hljs-variable{color:var(--white)}
+
+@media (max-width:620px){
+  .nb-io{grid-template-columns:1fr; gap:0}
+  .nb-tag{text-align:left; padding-top:8px; padding-bottom:4px}
+}
+
+footer{padding-block:38px 56px; color:var(--mist-dim); font-size:13.5px}
+
+@media (max-width:560px){
+  .built li{grid-template-columns:1fr}
+  .built .d{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important; transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ============ MASTHEAD ============ -->
+<header class="band masthead">
+  <div class="wrap">
+    <div class="lockup">
+      <svg viewBox="0 0 120 120" role="img" aria-label="Pharmeazor">
+        <defs>
+          <linearGradient id="cap" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2DE2F0" stop-opacity=".60"/>
+            <stop offset="60%" stop-color="#3E8BFF" stop-opacity=".32"/>
+            <stop offset="100%" stop-color="#8B7BF7" stop-opacity=".18"/>
+          </linearGradient>
+          <radialGradient id="seam">
+            <stop offset="0%" stop-color="#C9FBFF" stop-opacity="1"/>
+            <stop offset="55%" stop-color="#2DE2F0" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#2DE2F0" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-34 60 60)">
+          <g transform="translate(-3.5 -5)">
+            <polygon points="38,58 38,36 39.7,27.6 44.4,20.4 51.6,15.7 60,14 68.4,15.7 75.6,20.4 80.3,27.6 82,36 82,58"
+                     fill="none" stroke="#2DE2F0" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M60,38 L38,58 M60,38 L38,36 M60,38 L44.4,20.4 M60,38 L60,14 M60,38 L75.6,20.4 M60,38 L82,36 M60,38 L82,58 M60,52 L38,58 M60,52 L82,58 M60,52 L60,38"
+                  fill="none" stroke="#3E8BFF" stroke-width=".85" opacity=".55"/>
+            <g fill="#8FF2FB">
+              <circle cx="38" cy="36" r="2"/><circle cx="44.4" cy="20.4" r="1.8"/>
+              <circle cx="60" cy="14" r="2.2"/><circle cx="75.6" cy="20.4" r="1.8"/>
+              <circle cx="82" cy="36" r="2"/><circle cx="60" cy="38" r="2.4"/>
+            </g>
+          </g>
+          <g transform="translate(3.5 5)">
+            <polygon points="38,62 38,84 39.7,92.4 44.4,99.6 51.6,104.3 60,106 68.4,104.3 75.6,99.6 80.3,92.4 82,84 82,62"
+                     fill="url(#cap)" stroke="#2DE2F0" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M60,62 L38,84 M60,62 L60,106 M60,62 L82,84" fill="none" stroke="#3E8BFF" stroke-width=".85" opacity=".45"/>
+          </g>
+          <ellipse cx="60" cy="60" rx="30" ry="9" fill="url(#seam)"/>
+        </g>
+      </svg>
+      <div class="wordmark">Pharm<i>eazor</i>
+        <small>Chaque réponse, sa source.</small>
+      </div>
+    </div>
+
+    <p class="eyebrow">Projet 2 · Module RCR · M1 IA · Université Constantine 2</p>
+    <h1>Proofs of work</h1>
+    <p class="lede">
+      What each member of the team built, shown through their own work.
+    </p>
+  </div>
+</header>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ ROSTER ============ -->
+<section class="band" aria-labelledby="roster-h">
+  <div class="wrap">
+    <p class="eyebrow">The team</p>
+    <h2 id="roster-h" style="font-size:clamp(24px,3.4vw,34px);font-weight:600;letter-spacing:-.025em">Who did what</h2>
+
+    <div class="roster" style="margin-top:28px">
+      <a class="card" href="#aya-tesnim">
+        <span class="who">Kettab Aya Tesnim</span>
+        <span class="role">Data processing of the national nomenclature — exploration, cleaning, entity linking, and the full notebook.</span>
+        <span class="tag">Section 01 · Full notebook</span>
+      </a>
+      <a class="card" href="#aya-belmir">
+        <span class="who">Aya Belmir</span>
+        <span class="role">The single entry point for calling the AI model, and the baseline run that measures the raw model with no retrieval.</span>
+        <span class="tag">Section 02</span>
+      </a>
+      <a class="card" href="#dounia-beddiaf">
+        <span class="who">Dounia Beddiaf</span>
+        <span class="role">Data collection — ranking the sources by authority, and checking what each site actually permits before anything is fetched.</span>
+        <span class="tag">Section 03 · Audit data</span>
+      </a>
+      <a class="card" href="#alae-adjimi">
+        <span class="who">Alae Nour El Houda Adjimi</span>
+        <span class="role">Data collection — the dzair-pharma collector, and the structured records it produces for every substance.</span>
+        <span class="tag">Section 04 · Collected data</span>
+      </a>
+      <a class="card" href="#ryma-ait">
+        <span class="who">Ryma Ait El Hadj</span>
+        <span class="role">The document corpus and its traceability, and the parser that cuts a leaflet into the sections a pharmacist asks about.</span>
+        <span class="tag">Section 05 · Code &amp; registry</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ 01 — KETTAB AYA TESNIM ============ -->
+<section class="band member" id="aya-tesnim" aria-labelledby="tesnim-h">
+  <div class="wrap">
+
+    <div class="member-head">
+      <p class="eyebrow">Section 01 · Data processing</p>
+      <h2 id="tesnim-h">Kettab Aya Tesnim</h2>
+      <p class="role">
+        Read the official national register, audited it, cleaned it, and wrote down
+        every decision — including the ones that were to change nothing.
+      </p>
+      <a class="jump" href="#nb" id="jump-nb">Read the full notebook</a>
+    </div>
+
+    <div class="tiles">
+      <div class="tile accent"><div class="v num">284</div><div class="k">Rows audited</div></div>
+      <div class="tile"><div class="v num">5</div><div class="k">Anomalies found</div></div>
+      <div class="tile"><div class="v num">46</div><div class="k">Equivalence groups</div></div>
+      <div class="tile"><div class="v num">1,136</div><div class="k">Name entries</div></div>
+    </div>
+
+    <h3 class="sec">The notebook, part by part</h3>
+    <p>
+      <code>preprocessing.ipynb</code> — six parts, run top to bottom. The order is the
+      argument: explore before cleaning, or the rules are guesswork; verify after, or
+      you cannot tell what you broke.
+    </p>
+
+    <ol class="built">
+      <li>
+        <span class="no">01</span><span class="t">Load</span>
+        <span class="d">284 rows × 18 columns. One row is a registered <em>box</em>, not a
+        medicine — paracetamol appears 143 times because it has 143 presentations.</span>
+      </li>
+      <li>
+        <span class="no">02</span><span class="t">Explore</span>
+        <span class="d">Only one column has gaps: <code>list_class</code>, 118 of 284 (42%).
+        Counting with <code>dropna=False</code> also exposed a single <code>Liste I</code>
+        among 164 <code>LISTE I</code>.</span>
+      </li>
+      <li>
+        <span class="no">03</span><span class="t">Find the anomalies</span>
+        <span class="d">Zero fully duplicate rows, but one registration number carried by
+        two different products — and that number is the identifier the assistant cites.</span>
+      </li>
+      <li>
+        <span class="no">04</span><span class="t">Clean</span>
+        <span class="d">Dates parsed with <code>errors="coerce"</code> so unreadable ones are
+        counted instead of invented. Dosages normalised after a shape pass: replacing every
+        digit with <code>N</code> collapsed dozens of strings into a handful of patterns.</span>
+      </li>
+      <li>
+        <span class="no">05</span><span class="t">Link</span>
+        <span class="d">The <code>inn</code> column mixes base substance, salt form and
+        combination. Splitting them is entity linking — collapsing <code>PARACETAMOL</code>
+        and <code>PARACETAMOL/CODEINE</code> would make an opioid vanish from a search.</span>
+      </li>
+      <li>
+        <span class="no">06</span><span class="t">Verify</span>
+        <span class="d">Four checks against expected counts, all passing, before the result
+        is written out. 284 rows in, 284 rows out.</span>
+      </li>
+    </ol>
+
+    <details class="nb" id="nb">
+      <summary>
+        <span class="chev" aria-hidden="true"></span>
+        <span class="lbl">Read the whole notebook
+          <em>Every cell and every output, exactly as it ran</em>
+        </span>
+        <span class="hint">47 cells</span>
+      </summary>
+      <div class="nb-body" id="nb-body">
+        <p class="nb-status" id="nb-status">Loading the notebook…</p>
+      </div>
+      <a class="nb-raw" href="preprocessing.ipynb">Or open the raw .ipynb file</a>
+    </details>
+
+    <h3 class="sec">What the official source actually contained</h3>
+    <p>Five anomalies. Three were deliberately left in place, because correcting them would have meant inventing a fact.</p>
+
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>#</th><th>Anomaly</th><th>Evidence</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="n">1</td>
+            <td><code>LISTE I</code> and <code>Liste I</code> — two spellings</td>
+            <td class="n">1 row vs 164</td>
+            <td><span class="verdict fix">Normalised</span><span class="note">Form only, not meaning.</span></td>
+          </tr>
+          <tr>
+            <td class="n">2</td>
+            <td>118 missing values in <code>list_class</code></td>
+            <td class="n">116 of them paracetamol</td>
+            <td><span class="verdict keep">Kept empty</span><span class="note">The gap tracks regulatory status: plain paracetamol sells without prescription. Writing <code>LISTE I</code> there would invent a legal constraint.</span></td>
+          </tr>
+          <tr>
+            <td class="n">3</td>
+            <td>One registration number for two products</td>
+            <td><span class="mono">003/13 G 181/13/24</span><span class="note">CLAMOXYPEN ENFANTS and NOURISSONS</span></td>
+            <td><span class="verdict keep">Nothing deleted</span><span class="note">Traced to rows 3113–3114 of the source workbook — the anomaly predates the processing.</span></td>
+          </tr>
+          <tr>
+            <td class="n">4</td>
+            <td>Validity ending before it starts</td>
+            <td>APAP CAFEINE BEKER<span class="note mono">2023-03-29 → 2023-03-21</span></td>
+            <td><span class="verdict keep">Flagged, not fixed</span><span class="note">Which of the two dates is wrong is unknown; picking one is a guess.</span></td>
+          </tr>
+          <tr>
+            <td class="n">5</td>
+            <td>44 spellings of the INN for 8 base substances</td>
+            <td class="n">139 combinations detected</td>
+            <td><span class="verdict fix">Split</span><span class="note">Base / salt form / associated substances, with 2 cases marked uncertain rather than parsed.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sec">What came out of it</h3>
+    <p>Coverage is reported as a fraction, never rounded up to "done".</p>
+
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Result</th><th>Coverage</th><th>What is excluded, and why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Machine-readable dosages</td><td class="n">283 / 284</td>
+            <td>One value is the literal string <code>n</code>. No unit conversion is performed: deciding that <code>1G</code> equals <code>1000MG</code> is a pharmaceutical judgement the system may not make alone.</td>
+          </tr>
+          <tr>
+            <td>Machine-readable pack sizes</td><td class="n">207 / 284 <span style="color:var(--mist-dim)">(73%)</span></td>
+            <td>The rest are legitimately unreadable: <code>B/30 ET B/90</code> is two box sizes, <code>T/15G</code> a weight, <code>FL/60ML</code> a volume.</td>
+          </tr>
+          <tr>
+            <td>Equivalence groups</td><td class="n">46 groups / 242 products</td>
+            <td>Same substance, same dose, same galenic family. A tablet never substitutes for a syrup.</td>
+          </tr>
+          <tr>
+            <td>Name dictionary</td><td class="n">1,136 entries</td>
+            <td>Brand names, INNs and spelling variants, mapped onto the product table.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sec">The three rules behind every decision</h3>
+    <div class="rules">
+      <div class="rule-card">
+        <b>Never fill a blank</b>
+        <span>An empty cell may be carrying information. 118 of them were.</span>
+      </div>
+      <div class="rule-card">
+        <b>Never guess a number</b>
+        <span><code>T/15G</code> is a weight, not fifteen tablets.</span>
+      </div>
+      <div class="rule-card">
+        <b>A combination is not the lone substance</b>
+        <span>Otherwise an opioid disappears from a search for equivalents.</span>
+      </div>
+    </div>
+
+    <h3 class="sec">Self-check, run inside the notebook</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Check</th><th>Expected</th><th>Observed</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Rows preserved</td><td class="n">284</td><td class="n">284</td><td><span class="verdict pass">Pass</span></td></tr>
+          <tr><td>Dosages parsed</td><td class="n">283</td><td class="n">283</td><td><span class="verdict pass">Pass</span></td></tr>
+          <tr><td>Pack sizes parsed</td><td class="n">207</td><td class="n">207</td><td><span class="verdict pass">Pass</span></td></tr>
+          <tr><td>Values invented</td><td class="n">0</td><td class="n">0</td><td><span class="verdict pass">Pass</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ 02 — AYA BELMIR ============ -->
+<section class="band member" id="aya-belmir" aria-labelledby="belmir-h">
+  <div class="wrap">
+
+    <div class="member-head">
+      <p class="eyebrow">Section 02 · Model access and baseline</p>
+      <h2 id="belmir-h">Aya Belmir</h2>
+      <p class="role">
+        Built the single entry point used to call the AI model, then used it to measure
+        what the raw model does when nobody helps it.
+      </p>
+    </div>
+
+    <h3 class="sec">What she built</h3>
+
+    <ol class="built">
+      <li>
+        <span class="no">01</span><span class="t"><code>src/pharmeazor/answer/llm_client.py</code></span>
+        <span class="d">The single entry point that is used to call the AI model.
+        It loads the key safely from Colab Secrets and Kaggle Secrets, caches every
+        answer so the quota is not spent twice on the same prompt, and counts the
+        real API calls separately from the cache hits.</span>
+      </li>
+      <li>
+        <span class="no">02</span><span class="t"><code>scripts/run_baseline.py</code></span>
+        <span class="d">Runs one long, realistic question — ramipril plus ibuprofen in a
+        65-year-old patient — three times against the raw model, with no retrieval and
+        no rules. Three runs, because a single run cannot tell a one-off from a habit.</span>
+      </li>
+      <li>
+        <span class="no">03</span><span class="t">Error analysis</span>
+        <span class="d">Every wrong answer across the three runs is recorded with the
+        model's own words quoted, typed by the kind of error, and explained.</span>
+      </li>
+    </ol>
+
+    <h3 class="sec">What the baseline showed</h3>
+    <p>
+      Three runs of the same question produced invented brands, a dose figure from the
+      wrong regulatory region, a reassurance about a nephrotoxic combination in an
+      elderly patient, and one run that stopped before answering.
+    </p>
+
+    <div class="shots">
+      <figure>
+        <img src="img/belmir-llm-client.png"
+             alt="The ask_llm function in llm_client.py: it hashes the prompt, returns a cached answer on a cache hit, otherwise calls the model, stores the answer and increments the call counter.">
+        <figcaption>
+          <b>llm_client.py</b>
+          <code>ask_llm</code> hashes the prompt, returns the cached answer on a hit, and
+          otherwise calls the model once, saves the response and increments the call
+          counter — so the quota spent is a number, not an estimate.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="img/belmir-error-analysis.png"
+             alt="Error analysis table listing six errors across three baseline runs, typed as invented_dose, no_source and false_reassurance, each with the model's quote and why it is wrong.">
+        <figcaption>
+          <b>Error analysis</b>
+          Six errors across the three runs, typed as <code>invented_dose</code>,
+          <code>no_source</code> and <code>false_reassurance</code>, each with the model's
+          own quote beside the reason it is wrong.
+        </figcaption>
+      </figure>
+    </div>
+
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ 03 — DOUNIA BEDDIAF ============ -->
+<section class="band member" id="dounia-beddiaf" aria-labelledby="beddiaf-h">
+  <div class="wrap">
+
+    <div class="member-head">
+      <p class="eyebrow">Section 03 · Data collection — sources and permission</p>
+      <h2 id="beddiaf-h">Dounia Beddiaf</h2>
+      <p class="role">
+        Decided which sources the project is allowed to trust, and which pages it is
+        allowed to fetch — before a single page was collected.
+      </p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile accent"><div class="v num">10</div><div class="k">Sources audited</div></div>
+      <div class="tile"><div class="v num">3</div><div class="k">Authority levels</div></div>
+      <div class="tile"><div class="v num">8</div><div class="k">Start URLs allowed</div></div>
+      <div class="tile"><div class="v num">2</div><div class="k">Undetermined</div></div>
+    </div>
+
+    <h3 class="sec">What she built</h3>
+
+    <ol class="built">
+      <li>
+        <span class="no">01</span><span class="t"><code>source_authority.py</code></span>
+        <span class="d">Ten pharmaceutical sources, each classified by how much authority
+        it carries. Level 1 is Algerian officialdom — the ministry's own nomenclature and
+        the ANPP. Level 2 is professional platforms. Level 3 is foreign regulators, useful
+        for pharmacology but never for what is registered in Algeria.</span>
+      </li>
+      <li>
+        <span class="no">02</span><span class="t"><code>check_robots.py</code></span>
+        <span class="d">Reads each site's <code>robots.txt</code>, decides whether the target
+        URL may be fetched, and records the answer with a timestamp — a JSON report plus a
+        551-line log. Permission is checked before collection, not argued about after.</span>
+      </li>
+      <li>
+        <span class="no">03</span><span class="t"><code>discover_suburls.py</code></span>
+        <span class="d">Walks an allowed source to find the pages actually worth collecting,
+        so the crawler is pointed rather than broad.</span>
+      </li>
+    </ol>
+
+    <h3 class="sec">The audit, as it was recorded</h3>
+    <p>
+      Read straight from <code>robots_audit.json</code>. Nothing is denied outright; two
+      sources could not be determined, and those are reported as undetermined rather than
+      assumed to be fine.
+    </p>
+    <div class="tbl-scroll" data-src="evidence/robots_audit.json" data-kind="audit">
+      <p class="nb-status">Loading the audit…</p>
+    </div>
+
+    <h3 class="sec">The run's own summary</h3>
+    <p>The closing lines of <code>logs/robots_checker.log</code>.</p>
+    <pre class="ev-log" data-src="evidence/robots_checker_tail.log" data-kind="text">Loading the log…</pre>
+
+    <details class="nb">
+      <summary>
+        <span class="chev" aria-hidden="true"></span>
+        <span class="lbl">Read the source code
+          <em>source_authority.py, check_robots.py and discover_suburls.py</em>
+        </span>
+        <span class="hint">3 files</span>
+      </summary>
+      <div class="nb-body">
+        <div class="ev-code" data-src="evidence/code/source_authority.py" data-kind="code" data-label="source_authority.py"></div>
+        <div class="ev-code" data-src="evidence/code/check_robots.py" data-kind="code" data-label="check_robots.py"></div>
+        <div class="ev-code" data-src="evidence/code/discover_suburls.py" data-kind="code" data-label="discover_suburls.py"></div>
+      </div>
+    </details>
+
+    <h3 class="sec">What she reports as unfinished</h3>
+    <div class="rules">
+      <div class="rule-card">
+        <b>Access restrictions</b>
+        <span>Site terms of use still have to be read, separately from what
+        <code>robots.txt</code> permits. The two are not the same thing.</span>
+      </div>
+      <div class="rule-card">
+        <b>Automatic discovery failed on some sites</b>
+        <span>Visible in the delivery: <code>discovered_suburls.json</code> has an entry for
+        all 10 sources, with the sub-URL list still empty.</span>
+      </div>
+      <div class="rule-card">
+        <b>Next</b>
+        <span>Finish verifying the sources and collect the official RCP documents.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ 04 — ALAE NOUR EL HOUDA ADJIMI ============ -->
+<section class="band member" id="alae-adjimi" aria-labelledby="adjimi-h">
+  <div class="wrap">
+
+    <div class="member-head">
+      <p class="eyebrow">Section 04 · Data collection — the collector</p>
+      <h2 id="adjimi-h">Alae Nour El Houda Adjimi</h2>
+      <p class="role">
+        Wrote the collector that turns a substance name into structured records, and ran it
+        across the project's substance list.
+      </p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile accent"><div class="v num">1,650</div><div class="k">Records collected</div></div>
+      <div class="tile"><div class="v num">45</div><div class="k">Substance files</div></div>
+      <div class="tile"><div class="v num">29–33</div><div class="k">Fields per record</div></div>
+      <div class="tile"><div class="v num">1,367</div><div class="k">Distinct URLs</div></div>
+    </div>
+
+    <h3 class="sec">What she built</h3>
+
+    <ol class="built">
+      <li>
+        <span class="no">01</span><span class="t"><code>Dzair_Farma.py</code></span>
+        <span class="d">A collector that queries dzair-pharma by INN and pulls out the brand
+        name, ATC code, dosage, pharmaceutical form, laboratory, registered generics and
+        interactions — 665 lines.</span>
+      </li>
+      <li>
+        <span class="no">02</span><span class="t">Structured JSON output</span>
+        <span class="d">One file per substance, 45 of them, 1,650 records in total.
+        Twenty-nine fields appear on every single record, and up to 33 where the source page
+        carried more. Each record keeps its source URL, so every value can be traced back to
+        the page it came from.</span>
+      </li>
+      <li>
+        <span class="no">03</span><span class="t">Duplicate check</span>
+        <span class="d">She reported checking two files — 120 records, 87 distinct URLs.
+        Across the whole delivery the same pattern holds: 1,650 records resolve to 1,367
+        distinct URLs, so 283 are repeats. The duplication is measured, not guessed.</span>
+      </li>
+    </ol>
+
+    <h3 class="sec">One real record, in full</h3>
+    <p>
+      The first record of <code>amlodipine.json</code>, every field as collected. This is
+      what 1,650 of these look like.
+    </p>
+    <div class="tbl-scroll" data-src="evidence/sample_record.json" data-kind="record">
+      <p class="nb-status">Loading the record…</p>
+    </div>
+
+    <h3 class="sec">Where the records are</h3>
+    <p>The substance files that carry the most records.</p>
+    <div class="tbl-scroll" data-src="evidence/collection_summary.json" data-kind="files">
+      <p class="nb-status">Loading the file list…</p>
+    </div>
+
+    <details class="nb">
+      <summary>
+        <span class="chev" aria-hidden="true"></span>
+        <span class="lbl">Read the collector
+          <em>Dzair_Farma.py, 665 lines</em>
+        </span>
+        <span class="hint">1 file</span>
+      </summary>
+      <div class="nb-body">
+        <div class="ev-code" data-src="evidence/code/Dzair_Farma.py" data-kind="code" data-label="Dzair_Farma.py"></div>
+      </div>
+    </details>
+
+    <h3 class="sec">What she reports as unfinished</h3>
+    <div class="rules">
+      <div class="rule-card">
+        <b>Duplicates and missing RCP links</b>
+        <span>283 repeated URLs across the delivery, and not every record carries a link to
+        its RCP.</span>
+      </div>
+      <div class="rule-card">
+        <b>Validation against official sources</b>
+        <span>dzair-pharma is a level 2 source. What it says has to be confirmed against the
+        ministry's nomenclature before it is trusted.</span>
+      </div>
+      <div class="rule-card">
+        <b>Next</b>
+        <span>Clean the data, remove the duplicates, and fill the gaps.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ============ 05 — RYMA AIT EL HADJ ============ -->
+<section class="band member" id="ryma-ait" aria-labelledby="ryma-h">
+  <div class="wrap">
+
+    <div class="member-head">
+      <p class="eyebrow">Section 05 · Document corpus and section extraction</p>
+      <h2 id="ryma-h">Ryma Ait El Hadj</h2>
+      <p class="role">
+        Built the document side of the corpus: which leaflets the project holds, what each
+        source legally permits, and the parser that cuts a document into the sections a
+        pharmacist actually asks about.
+      </p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile accent"><div class="v num">5</div><div class="k">Documents collected</div></div>
+      <div class="tile"><div class="v num">3</div><div class="k">Molecules covered</div></div>
+      <div class="tile"><div class="v num">5</div><div class="k">Section categories</div></div>
+      <div class="tile"><div class="v num">106</div><div class="k">Tests passing</div></div>
+    </div>
+
+    <h3 class="sec">What she built</h3>
+
+    <ol class="built">
+      <li>
+        <span class="no">01</span><span class="t">The document corpus</span>
+        <span class="d">Five pharmaceutical documents collected and identified for three
+        molecules, each kept with a metadata file carrying <code>source_id</code>,
+        <code>authority</code>, <code>country</code>, <code>document_type</code>,
+        <code>product</code> and <code>dci</code>. A final audit confirmed all five files
+        carry every required field.</span>
+      </li>
+      <li>
+        <span class="no">02</span><span class="t">The source registry</span>
+        <span class="d">Six commits documenting what each source permits, not just what it
+        contains: PharmNet's access conditions, ANPP's RCP conditions, DailyMed's reuse
+        restrictions, VIDAL recorded as <em>excluded</em> on its terms of use, and ANSM/BDPM
+        added as an official source.</span>
+      </li>
+      <li>
+        <span class="no">03</span><span class="t"><code>extract/sections.py</code></span>
+        <span class="d">Three commits teaching the parser the heading styles real documents
+        use: numbered RCP sections, hyphenated headings, and long leaflet headings. The
+        extractor recognises indications, contraindications, posology, interactions and
+        adverse effects.</span>
+      </li>
+      <li>
+        <span class="no">04</span><span class="t">A test fixture</span>
+        <span class="d"><code>tests/fixtures/amlodipine_sections_sample.txt</code>, covering
+        all five categories. She labels it plainly as a synthetic sample for testing the
+        parser — it is not a real medical leaflet, and the page below shows why that matters.</span>
+      </li>
+    </ol>
+
+    <h3 class="sec">The five documents</h3>
+    <p>
+      Her own table. The coverage column is what the parser actually extracted, not what it
+      was hoped to extract.
+    </p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Molecule</th><th>Document</th><th>Source</th><th>Authority</th><th>Sections extracted</th></tr></thead>
+        <tbody>
+          <tr><td>Paracetamol</td><td>RCP DOLIPRANE 2,4 %</td><td>ANPP — Algeria</td><td><span class="lvl lvl-1">Official</span></td><td class="n">5</td></tr>
+          <tr><td>Paracetamol</td><td>Notice DOLIPRANE 2,4 %</td><td>Pharm'Net — Algeria</td><td><span class="lvl lvl-2">Professional</span></td><td class="n">2 <span style="color:var(--warn)">of 5</span></td></tr>
+          <tr><td>Amoxicillin</td><td>RCP BIOPAMOX 1 g</td><td>Pharm'Net — Algeria</td><td><span class="lvl lvl-2">Professional</span></td><td class="n">5</td></tr>
+          <tr><td>Amoxicillin</td><td>Notice AMOXICILLINE BGR 1 g</td><td>ANSM/BDPM — France</td><td><span class="lvl lvl-1">Official</span></td><td class="n">5</td></tr>
+          <tr><td>Amlodipine</td><td>RCP MIBRAL</td><td>ANPP — Algeria</td><td><span class="lvl lvl-1">Official</span></td><td class="n">5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rules">
+      <div class="rule-card">
+        <b>The 2-of-5 was left alone</b>
+        <span>The Pharm'Net paracetamol notice yields only two recognised sections. She kept
+        that result rather than loosening the parser or editing the document to make the
+        number look better.</span>
+      </div>
+      <div class="rule-card">
+        <b>French is not Algerian</b>
+        <span>The AMOXICILLINE BGR notice is a French presentation from ANSM/BDPM. It must
+        not be confused with the Algerian BIOPAMOX RCP, and its posology must never be
+        carried across to an Algerian product.</span>
+      </div>
+      <div class="rule-card">
+        <b>Professional is not official</b>
+        <span>Pharm'Net documents are recorded as a professional source. The distinction is
+        stored in the metadata, not left to memory.</span>
+      </div>
+    </div>
+
+    <h3 class="sec">The registry entry she added</h3>
+    <p>
+      From <code>data/reference/source_registry.yaml</code>. Note what it records besides the
+      URL: that robots.txt was <em>not</em> checked, and that the open licence on the raw data
+      must not be assumed to cover the full leaflets.
+    </p>
+    <pre class="ev-log" data-src="evidence/ansm_bdpm.yaml" data-kind="text">Loading the registry entry…</pre>
+
+    <h3 class="sec">Her quality checks</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Check</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>ruff check src tests</code></td><td><span class="verdict pass">Passed</span></td></tr>
+          <tr><td><code>PYTHONPATH=src pytest -q</code></td><td><span class="verdict pass">106 tests passed</span></td></tr>
+          <tr><td><code>git diff --check</code></td><td><span class="verdict pass">No errors</span></td></tr>
+          <tr><td>YAML validated with <code>yaml.safe_load</code></td><td><span class="verdict pass">Valid</span></td></tr>
+          <tr><td>Metadata audit across the five documents</td><td><span class="verdict pass">5 / 5 complete</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="nb">
+      <summary>
+        <span class="chev" aria-hidden="true"></span>
+        <span class="lbl">Read the extractor and the fixture
+          <em>sections.py, and the synthetic sample it is tested against</em>
+        </span>
+        <span class="hint">2 files</span>
+      </summary>
+      <div class="nb-body">
+        <div class="ev-code" data-src="evidence/code/sections.py" data-kind="code" data-label="src/pharmeazor/extract/sections.py"></div>
+        <div class="ev-code" data-src="evidence/amlodipine_sections_sample.txt" data-kind="code" data-label="tests/fixtures/amlodipine_sections_sample.txt — synthetic test data"></div>
+      </div>
+    </details>
+
+    <h3 class="sec">What she reports as unfinished</h3>
+    <div class="rules">
+      <div class="rule-card">
+        <b>Only one document for amlodipine</b>
+        <span>The RCP MIBRAL from ANPP. A second verifiable document could not be found, and
+        she refused to use dead links or search-result snippets as sources rather than put
+        unverified material in the corpus.</span>
+      </div>
+      <div class="rule-card">
+        <b>The documents are not in this checkout</b>
+        <span>Her report keeps them in <code>data/raw/notices/</code>, which the repository
+        does not track. The metadata and the registry entries are in; the files themselves
+        have to be supplied separately.</span>
+      </div>
+      <div class="rule-card">
+        <b>Pull request awaiting review</b>
+        <span>Branch <code>feat/semaine1-notices</code>, submitted as PR #2 and pending the
+        repository owner's review. Status: published, final validation pending.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<footer>
+  <div class="wrap">
+    Pharmeazor · Projet 2, module RCR · M1 IA, faculté NTIC, département IFA ·
+    Université Constantine 2 · encadré par Pr. BOURAMOUL.
+  </div>
+</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+(function () {
+  var body = document.getElementById('nb-body');
+  var status = document.getElementById('nb-status');
+  var panel = document.getElementById('nb');
+  var jump = document.getElementById('jump-nb');
+  if (!body) return;
+
+  // The jump button opens the notebook as well as scrolling to it.
+  if (jump && panel) {
+    jump.addEventListener('click', function () { panel.open = true; });
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
+    });
+  }
+  function src(x) { return Array.isArray(x) ? x.join('') : (x || ''); }
+
+  function hl(code) {
+    try { if (window.hljs) return window.hljs.highlight(code, { language: 'python' }).value; }
+    catch (e) { /* fall through to plain text */ }
+    return esc(code);
+  }
+  function md(text) {
+    try { if (window.marked) return window.marked.parse(text); }
+    catch (e) { /* fall through to plain text */ }
+    return '<pre class="nb-src">' + esc(text) + '</pre>';
+  }
+  function cleanHtml(h) {
+    return h
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/\sborder="\d+"/gi, '');
+  }
+
+  fetch('preprocessing.ipynb')
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (nb) {
+      var parts = [], n = 0;
+      (nb.cells || []).forEach(function (c) {
+        var s = src(c.source);
+        if (c.cell_type === 'markdown') {
+          if (!s.trim()) return;
+          parts.push('<div class="nb-cell nb-md">' + md(s) + '</div>');
+          return;
+        }
+        if (c.cell_type !== 'code') return;
+        n++;
+        var h = '<div class="nb-cell"><div class="nb-io">' +
+                '<div class="nb-tag in">In [' + n + ']</div><div>' +
+                '<pre class="nb-src"><code>' + hl(s) + '</code></pre>';
+        (c.outputs || []).forEach(function (o) {
+          var d = o.data || {};
+          if (o.output_type === 'stream') {
+            h += '<pre class="nb-out">' + esc(src(o.text)) + '</pre>';
+          } else if (o.output_type === 'execute_result' || o.output_type === 'display_data') {
+            if (d['text/html']) {
+              h += '<div class="nb-out tbl">' + cleanHtml(src(d['text/html'])) + '</div>';
+            } else if (d['text/plain']) {
+              h += '<pre class="nb-out">' + esc(src(d['text/plain'])) + '</pre>';
+            }
+          } else if (o.output_type === 'error') {
+            h += '<pre class="nb-out">' +
+                 esc((o.traceback || []).join('\n').replace(/\u001b\[[0-9;]*m/g, '')) +
+                 '</pre>';
+          }
+        });
+        parts.push(h + '</div></div></div>');
+      });
+      body.innerHTML = parts.join('');
+    })
+    .catch(function () {
+      if (status) {
+        status.textContent =
+          'The notebook could not be rendered here. Use the link below to open the raw .ipynb file.';
+      }
+    });
+
+  // ---- evidence blocks: each element names its own file and how to show it ----
+  function cell(v) {
+    if (v === null || v === undefined || v === '') return '<span style="color:var(--mist-dim)">—</span>';
+    if (v === true) return '<span class="verdict pass">Allowed</span>';
+    if (v === false) return '<span class="verdict keep">Denied</span>';
+    return esc(v);
+  }
+
+  var renderers = {
+    audit: function (rows, el) {
+      var h = '<table><thead><tr><th>Source</th><th>Authority</th><th>Country</th>' +
+              '<th>robots.txt</th><th>Start URL</th></tr></thead><tbody>';
+      rows.forEach(function (r) {
+        h += '<tr><td>' + esc(r.name) +
+             '<span class="host">' + esc(r.url) + '</span></td>' +
+             '<td><span class="lvl lvl-' + r.level + '">Level ' + r.level + '</span>' +
+             '<span class="host">' + esc(r.type) + '</span></td>' +
+             '<td>' + esc(r.country) + '</td>' +
+             '<td><code>' + esc(r.robots_status) + '</code></td>' +
+             '<td>' + (r.url_allowed === true
+                       ? '<span class="verdict pass">Allowed</span>'
+                       : '<span class="verdict keep">Undetermined</span>') + '</td></tr>';
+      });
+      el.innerHTML = h + '</tbody></table>';
+    },
+    record: function (rec, el) {
+      var h = '<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+      Object.keys(rec).forEach(function (k) {
+        var v = rec[k];
+        if (v && typeof v === 'object') {
+          v = Array.isArray(v) ? v.length + ' entries' : Object.keys(v).length + ' keys';
+        }
+        v = String(v === null || v === undefined ? '' : v);
+        if (v.length > 320) v = v.slice(0, 320) + '…';
+        h += '<tr><td class="field">' + esc(k) + '</td><td>' + cell(v) + '</td></tr>';
+      });
+      el.innerHTML = h + '</tbody></table>';
+    },
+    files: function (sum, el) {
+      var h = '<table><thead><tr><th>Substance file</th><th>Records</th><th>Size</th>' +
+              '</tr></thead><tbody>';
+      (sum.largest || []).forEach(function (f) {
+        h += '<tr><td><code>' + esc(f.file) + '</code></td>' +
+             '<td class="n">' + f.records + '</td>' +
+             '<td class="n">' + f.kb + ' KB</td></tr>';
+      });
+      h += '</tbody></table>';
+      el.innerHTML = h;
+    },
+    code: function (text, el) {
+      var lines = text.split('\n').length;
+      el.innerHTML = '<div class="ev-name">' + esc(el.dataset.label || '') +
+                     ' <span>' + lines + ' lines</span></div>' +
+                     '<pre><code>' + hl(text) + '</code></pre>';
+    },
+    text: function (text, el) { el.textContent = text; }
+  };
+
+  document.querySelectorAll('[data-src]').forEach(function (el) {
+    var kind = el.dataset.kind;
+    var asText = (kind === 'code' || kind === 'text');
+    fetch(el.dataset.src)
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return asText ? r.text() : r.json(); })
+      .then(function (data) { renderers[kind](data, el); })
+      .catch(function () {
+        el.innerHTML = '<p class="nb-status">This file could not be loaded here.</p>';
+      });
+  });
+})();
+</script>
+</body>
+</html>

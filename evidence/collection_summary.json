@@ -1,0 +1,100 @@
+{
+ "files": 45,
+ "records": 1650,
+ "distinct_urls": 1367,
+ "duplicate_urls": 283,
+ "fields_per_record": 29,
+ "field_names": [
+  "url",
+  "status",
+  "DCI (Substance active)",
+  "Nom de marque",
+  "N° d'enregistrement",
+  "Code produit",
+  "Code ATC",
+  "Type de produit",
+  "Origine de fabrication",
+  "Forme pharmaceutique",
+  "Voie d'administration",
+  "Méthode d'administration",
+  "Dosage",
+  "Conditionnement",
+  "Prescription",
+  "Stabilité",
+  "Laboratoire",
+  "Pays d'origine",
+  "Date d'enregistrement",
+  "Date de fin de validité",
+  "Année de nomenclature",
+  "Version source",
+  "description",
+  "medicament_en_algerie",
+  "PPA",
+  "RCP PDF",
+  "generiques",
+  "related_presentations",
+  "interactions"
+ ],
+ "largest": [
+  {
+   "file": "acide_clavulanique.json",
+   "records": 60,
+   "kb": 365
+  },
+  {
+   "file": "amlodipine.json",
+   "records": 60,
+   "kb": 961
+  },
+  {
+   "file": "amoxicilline.json",
+   "records": 60,
+   "kb": 456
+  },
+  {
+   "file": "amoxicilline_acide_clavulanique.json",
+   "records": 60,
+   "kb": 348
+  },
+  {
+   "file": "diclof_nac.json",
+   "records": 60,
+   "kb": 972
+  },
+  {
+   "file": "gentamicine.json",
+   "records": 60,
+   "kb": 351
+  },
+  {
+   "file": "hydrochlorothiazide.json",
+   "records": 60,
+   "kb": 1423
+  },
+  {
+   "file": "ibuprof_ne.json",
+   "records": 60,
+   "kb": 1051
+  },
+  {
+   "file": "m_tronidazole.json",
+   "records": 60,
+   "kb": 744
+  },
+  {
+   "file": "parac_tamol.json",
+   "records": 60,
+   "kb": 624
+  },
+  {
+   "file": "parac_tamol_cod_ine.json",
+   "records": 60,
+   "kb": 615
+  },
+  {
+   "file": "valsartan.json",
+   "records": 60,
+   "kb": 1224
+  }
+ ]
+}

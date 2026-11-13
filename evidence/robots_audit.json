@@ -1,0 +1,112 @@
+[
+ {
+  "name": "Ministère industrie Pharmaceutique",
+  "url": "https://www.miph.gov.dz/fr/",
+  "level": 1,
+  "type": "Official Algerian nomenclature",
+  "country": "Algeria",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:01.940618+00:00"
+ },
+ {
+  "name": "PharmNet",
+  "url": "https://pharmnet-dz.com/",
+  "level": 2,
+  "type": "professional medical platform",
+  "country": "Algeria",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:07.903704+00:00"
+ },
+ {
+  "name": "MEDAlgérie",
+  "url": "https://www.medal-dz.com/",
+  "level": 2,
+  "type": "professional medical platform",
+  "country": "Algeria",
+  "robots_status": "robots_not_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:08.831333+00:00"
+ },
+ {
+  "name": "dzair-pharma.net",
+  "url": "https://www.dzair-pharma.net/",
+  "level": 2,
+  "type": "professional medical platform",
+  "country": "Algeria",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:09.633794+00:00"
+ },
+ {
+  "name": "ANPP",
+  "url": "https://rcp.anpp.dz/",
+  "level": 1,
+  "type": "Autorité réglementaire nationale",
+  "country": "Algeria",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:10.480812+00:00"
+ },
+ {
+  "name": "DailyMed",
+  "url": "https://dailymed.nlm.nih.gov/dailymed/",
+  "level": 3,
+  "type": "Organisme public américain",
+  "country": "United States",
+  "robots_status": "invalid_robots_content",
+  "url_allowed": null,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:11.962754+00:00"
+ },
+ {
+  "name": "EMA",
+  "url": "https://www.ema.europa.eu/en",
+  "level": 3,
+  "type": "Organisme public européen",
+  "country": "European Union",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:14.652559+00:00"
+ },
+ {
+  "name": "ANSM",
+  "url": "https://ansm.sante.fr/",
+  "level": 3,
+  "type": "Organisme public français",
+  "country": "France",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:15.543024+00:00"
+ },
+ {
+  "name": "TGA",
+  "url": "https://www.tga.gov.au/",
+  "level": 3,
+  "type": "National Regulatory Authority",
+  "country": "Australia",
+  "robots_status": "timeout",
+  "url_allowed": null,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:16.336286+00:00"
+ },
+ {
+  "name": "MHRA",
+  "url": "https://products.mhra.gov.uk/",
+  "level": 3,
+  "type": "National Regulatory Authority",
+  "country": "United Kingdom",
+  "robots_status": "robots_found",
+  "url_allowed": true,
+  "crawl_delay": null,
+  "checked_at": "2026-11-11T20:24:46.493342+00:00"
+ }
+]

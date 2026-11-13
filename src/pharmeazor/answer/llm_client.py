@@ -24,9 +24,9 @@ def _load_api_key() -> str:
         if key:
             print(f"[llm_client] key loaded (ends ...{key[-4:]})")
             return key
-    except ImportError:
+    except Exception:
+        # ImportError (not Colab) or AttributeError (no kernel in subprocess)
         pass
-
     try:
         from kaggle_secrets import UserSecretsClient
 

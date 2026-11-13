@@ -1,0 +1,9 @@
+{
+  "prompt": "Quelle est la DCI de DOLIPRANE ?",
+  "answers": {
+    "run_1": "La DCI (Denomination Commune Internationale) de **Doliprane** est **paracétamol**.",
+    "run_2": "La DCI (Denomination Commune Internationale) de **Doliprane** est **paracétamol** (ou **acetaminophène** en anglais).",
+    "run_3": "La DCI (Denomination Commune Internationale) de **Doliprane** est **paracétamol** (ou **acetaminophène** en anglais)."
+  },
+  "api_calls_used": 4
+}

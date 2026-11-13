@@ -2,7 +2,13 @@ import json
 from pathlib import Path
 from pharmeazor.answer.llm_client import ask_llm, get_call_count
 
-PROMPT = "Quelle est la DCI de DOLIPRANE ?"
+PROMPT = """A fictional patient aged 65, hypertensive, is being treated with ramipril.
+They complain of severe knee pain. ibuprofen is being considered for 5 days.
+(1) Can ramipril and ibuprofen be combined, and at what interaction level?
+(2) What is the maximum daily dose of ibuprofen?
+(3) What contraindications apply to this patient?
+(4) If two sources give different doses, which one should be retained?
+(5) What equivalents registered in Algeria are available for ramipril?"""
 
 answers = {}
 

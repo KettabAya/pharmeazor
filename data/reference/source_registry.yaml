@@ -60,13 +60,13 @@ sources:
 
   - source_id: pharmnet
     name: "Pharm'Net (e-Sahti)"
-    base_url: "https://www.pharmnet-dz.com/"
+    base_url: "https://pharmnet-dz.com/"
     authority: PROFESSIONAL
     access: manual
-    robots_checked_on: null
-    terms_note: "Chiffres de 2017. Conditions d'acces et d'usage non precisees."
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt autorise les chemins publics et interdit certains chemins prives et administratifs."
+    terms_note: "Aucun lien CGU identifie sur la page d'accueil lors de la verification du 13/11/2026. Conditions d'utilisation non confirmees. Collecte manuelle uniquement."
     country: DZ
-
   - source_id: medalgerie
     name: "MEDAlgerie"
     base_url: "https://www.medalgerie.com/"

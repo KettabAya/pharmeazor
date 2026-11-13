@@ -24,7 +24,7 @@ Elle n'est jamais contournée.
 | Thésaurus des interactions — ANSM | 2 — institutionnelle | *à remplir* | *à remplir* | complément, jamais substitut |
 | DailyMed | 2 — institutionnelle | *à remplir* | *à remplir* | notice américaine, peut différer |
 | EMA | 2 — institutionnelle | *à remplir* | *à remplir* | notice européenne, peut différer |
-| Pharm'Net (e-Sahti) | 1 — secondaire | *à remplir* | *à remplir* | chiffres de 2017 |
+| Pharm'Net (e-Sahti) | 1 — secondaire | 2026-11-13 | accès manuel uniquement | robots.txt : accès autorisé aux chemins publics, chemins privés et administratifs interdits. CGU : aucun lien identifié sur la page d'accueil lors de la vérification du 13/11/2026. Conditions d'utilisation non confirmées. |
 | MEDAlgérie | 1 — secondaire | *à remplir* | *à remplir* | pas d'API mentionnée |
 | dzair-pharma.net | 1 — secondaire | *à remplir* | *à remplir* | données à titre informatif |
 | Forums, blogs, réseaux sociaux | 0 — écartée | — | — | hors corpus |

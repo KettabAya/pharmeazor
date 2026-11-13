@@ -127,6 +127,7 @@ def split_sections(text: str) -> SectionSplit:
             (existing + "\n" + body).strip() if existing else body
         )
 
+    
     for line in text.splitlines():
         if _looks_like_heading(line):
             section = classify_heading(line)
@@ -134,8 +135,10 @@ def split_sections(text: str) -> SectionSplit:
                 flush()
                 current_key, current_bucket, buffer = section, split.sections, []
                 continue
-            if current_key is not None:
-                # A new, unrecognised heading closes the previous section.
+            if current_key is not None and re.match(
+                r"^\s*\d+(?:\.\d+)*\.\s+\S", line
+            ):
+                # An unrecognised numbered heading closes the previous section.
                 flush()
                 current_key, current_bucket, buffer = line.strip(), split.unmapped, []
                 continue

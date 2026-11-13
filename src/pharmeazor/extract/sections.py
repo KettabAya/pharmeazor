@@ -1,13 +1,5 @@
-"""Splitting a leaflet or RCP into the rubriques the project needs.
 
-Leaflets are not structured the same way twice: the heading above the same
-content may read "Contre-indications", "Ne prenez jamais ..." or
-"4.3. Contre-indications". This module recognises the heading whatever it is
-called, and keeps the original sentences intact so that citations stay exact.
-
-Headings that no rule matches are left in an ``unmapped`` bucket rather than
-guessed at — a section wrongly labelled is worse than one left unlabelled.
-"""
+"""Splitting a leaflet or RCP into the rubriques the project needs."""
 
 from __future__ import annotations
 
@@ -19,32 +11,34 @@ from ..schemas import Section
 
 __all__ = ["SectionSplit", "split_sections", "HEADING_PATTERNS"]
 
-# Ordered: the first pattern that matches a heading wins.
+# Accept section numbers followed by a dot, a dash, or a space.
+_NUMBER = r"(?:\d+(?:\.\d+)*[.)]?\s*[-–]?\s*)?"
+
 HEADING_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     (Section.CONTRAINDICATIONS, re.compile(
-        r"^\s*(?:\d[\d.]*\s*)?(?:contre[-\s]?indications?"
+        r"^\s*" + _NUMBER + r"(?:contre[-\s]?indications?"
         r"|ne (?:prenez|utilisez) jamais"
         r"|quand ne (?:faut|doit)[- ]il pas)", re.I)),
     (Section.INTERACTIONS, re.compile(
-        r"^\s*(?:\d[\d.]*\s*)?(?:interactions?"
+        r"^\s*" + _NUMBER + r"(?:interactions?"
         r"|associations? (?:medicamenteuses?|deconseillees?)"
         r"|autres medicaments et)", re.I)),
     (Section.POSOLOGY, re.compile(
-        r"^\s*(?:\d[\d.]*\s*)?(?:posologie"
+        r"^\s*" + _NUMBER + r"(?:posologie"
         r"|mode (?:et voie )?d.administration"
         r"|comment (?:prendre|utiliser)"
         r"|dose|doses|dosage)", re.I)),
     (Section.INDICATIONS, re.compile(
-        r"^\s*(?:\d[\d.]*\s*)?(?:indications?(?: therapeutiques?)?"
+        r"^\s*" + _NUMBER + r"(?:indications?(?: therapeutiques?)?"
         r"|dans quels? cas"
         r"|qu.est[- ]ce que .* et dans quels? cas)", re.I)),
     (Section.ADVERSE, re.compile(
-        r"^\s*(?:\d[\d.]*\s*)?(?:effets? indesirables?"
+        r"^\s*" + _NUMBER + r"(?:effets? indesirables?"
         r"|quels? sont les effets"
         r"|effets? secondaires?)", re.I)),
 ]
 
-_HEADING_SHAPE = re.compile(r"^\s*(?:\d[\d.]*\s+)?[^\n]{3,90}$")
+_HEADING_SHAPE = re.compile(r"^\s*(?:\d[\d.]*\s*[-–.)]?\s*)?[^\n]{3,180}$")
 
 
 def _strip_accents(text: str) -> str:
@@ -55,12 +49,9 @@ def _strip_accents(text: str) -> str:
 def _looks_like_heading(line: str) -> bool:
     """Heuristics for a heading: short, no sentence-ending period, not a list item."""
     stripped = line.strip()
-    if not stripped or len(stripped) > 90:
+    if not stripped or len(stripped) > 180:
         return False
-    # A heading is a label, not a sentence. "36 mois." is body text even though
-    # it opens with a number, so trailing punctuation disqualifies a line
-    # outright -- section numbers such as "4.3." sit at the start, never the end.
-    if stripped.endswith((".", ";", ",", ":")):
+    if stripped.endswith((".", ";", ",")):
         return False
     if stripped.startswith(("-", "•", "*")):
         return False
@@ -101,24 +92,13 @@ class SectionSplit:
 
 
 def split_sections(text: str) -> SectionSplit:
-    """Split a plain-text leaflet into rubriques.
-
-    Args:
-        text: The document converted to text, newlines preserved.
-
-    Returns:
-        A :class:`SectionSplit`. Content before the first recognised heading is
-        dropped (it is the product name block); content under an unrecognised
-        heading lands in ``unmapped`` for manual review.
-    """
+    """Split a plain-text leaflet into rubriques."""
     split = SectionSplit()
     current_key: str | None = None
     current_bucket: dict[str, str] | None = None
     buffer: list[str] = []
 
     def flush() -> None:
-        # Register the heading even when its body is empty: a rubrique that
-        # exists but holds nothing is a finding, not something to hide.
         if current_key is None or current_bucket is None:
             return
         body = "\n".join(buffer).strip()
@@ -134,8 +114,9 @@ def split_sections(text: str) -> SectionSplit:
                 flush()
                 current_key, current_bucket, buffer = section, split.sections, []
                 continue
-            if current_key is not None:
-                # A new, unrecognised heading closes the previous section.
+            if current_key is not None and re.match(
+                r"^\s*\d+(?:\.\d+)*[.)]?\s*[-–]?\s+\S", line
+            ):
                 flush()
                 current_key, current_bucket, buffer = line.strip(), split.unmapped, []
                 continue

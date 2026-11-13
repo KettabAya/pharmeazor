@@ -11,12 +11,12 @@
 sources:
   - source_id: anpp_rcp
     name: "RCP et notices officiels - ANPP"
-    base_url: "https://anpp.dz/"
+    base_url: "https://rcp.anpp.dz/"
     authority: OFFICIAL
     access: manual
-    robots_checked_on: null
-    robots_note: "A verifier avant toute collecte automatique."
-    terms_note: "Documents officiels valides en Algerie. Source prioritaire."
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt autorise tous les chemins publics (Disallow vide)."
+    terms_note: "Aucun lien CGU ou mentions legales identifie sur la page d’accueil. Conditions de reutilisation non confirmees. Collecte manuelle uniquement; verifier les droits avant redistribution."
     country: DZ
 
   - source_id: nomenclature
@@ -43,9 +43,10 @@ sources:
     name: "DailyMed - notices officielles americaines"
     base_url: "https://dailymed.nlm.nih.gov/"
     authority: INSTITUTIONAL
-    access: manual
-    robots_checked_on: null
-    terms_note: "API publique disponible. Conditions de reutilisation a verifier."
+    access: forbidden
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt interdit uniquement le chemin /archives/."
+    terms_note: "Droits de reutilisation des labels fournis par les societes non confirmes. Ne pas integrer au corpus ni redistribuer sans verification des droits."
     country: US
     language: en
 
@@ -60,12 +61,33 @@ sources:
 
   - source_id: pharmnet
     name: "Pharm'Net (e-Sahti)"
-    base_url: "https://www.pharmnet-dz.com/"
+    base_url: "https://pharmnet-dz.com/"
     authority: PROFESSIONAL
     access: manual
-    robots_checked_on: null
-    terms_note: "Chiffres de 2017. Conditions d'acces et d'usage non precisees."
+    robots_checked_on: "2026-11-13"
+    robots_note: "robots.txt autorise les chemins publics et interdit certains chemins prives et administratifs."
+    terms_note: "Aucun lien CGU identifie sur la page d'accueil lors de la verification du 13/11/2026. Conditions d'utilisation non confirmees. Collecte manuelle uniquement."
     country: DZ
+  - source_id: ansm_bdpm
+    name: "Base de donnees publique des medicaments - ANSM"
+    base_url: "https://base-donnees-publique.medicaments.gouv.fr/"
+    authority: OFFICIAL
+    access: manual
+    robots_checked_on: null
+    robots_note: "robots.txt non verifie. Consultation et collecte manuelles uniquement."
+    terms_note: "Les donnees brutes telechargeables sont reutilisables sous conditions: attribution de la source et de la date de mise a jour, sans alteration. La licence des donnees brutes ne doit pas etre presumee applicable aux notices/RCP complets; verifier les droits documentaires avant redistribution."
+    country: FR
+    language: fr
+  - source_id: vidal
+    name: "VIDAL - Base de donnees medicamenteuse"
+    base_url: "https://www.vidal.fr/"
+    authority: PROFESSIONAL
+    access: forbidden
+    robots_checked_on: "2026-11-13"
+    robots_note: "Pages medicaments publiques non interdites explicitement; certains chemins sont interdits."
+    terms_note: "Reproduction integrale ou partielle sans consentement interdite selon les CGU. Source exclue faute d autorisation de reutilisation."
+    country: FR
+    language: fr
 
   - source_id: medalgerie
     name: "MEDAlgerie"

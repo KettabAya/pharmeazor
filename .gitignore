@@ -7,6 +7,8 @@ credentials*.json
 data/raw/*
 data/interim/*
 data/processed/*
+!data/processed/cache.json
+!data/processed/call_counter.json
 !data/**/.gitkeep
 .cache/
 
